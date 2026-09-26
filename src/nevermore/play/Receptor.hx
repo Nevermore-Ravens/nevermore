@@ -10,7 +10,7 @@ class Receptor extends flixel.FlxSprite {
 	public var lane:Int;
 	public var isHolding:Bool = false;
 	public var parent:Strumline;
-	public var quants:Bool = false;
+	public var quantization:Bool = false;
 	public function new(parent:Strumline, lane:Int) {
 		super();
 		this.parent = parent;
@@ -26,10 +26,13 @@ class Receptor extends flixel.FlxSprite {
 		}
 	}
 
-	public function glow(?name:String, ?note:Note) {
+	public function glow(?name:String) {
 		name ??= 'glow';
-		//quants = note != null && note.quants;
-		//color = quants ? note.color : FlxColor.WHITE;
+
+		if (name == 'standard') {
+			color = 0xFFFFFFFF;
+			quantization = false;
+		}
 
 		animation.play(name, true);
 		centerOffsets();
@@ -63,7 +66,7 @@ class Receptor extends flixel.FlxSprite {
 	override function drawComplex(camera:flixel.FlxCamera) {
 		_frame.prepareMatrix(_matrix, FlxFrameAngle.ANGLE_0, checkFlipX(), checkFlipY());
 		prepareMatrix();
-		camera.drawNote(_frame, _matrix, colorTransform, blend, antialiasing, quants);
+		camera.drawNote(_frame, _matrix, colorTransform, blend, antialiasing, quantization);
 	}
 
 	#if !NEVERMORE_NO_MODCHARTS
@@ -154,7 +157,7 @@ class Receptor extends flixel.FlxSprite {
 			vert.project();
 		}
 
-		modchart.pushDraw(player, parent, cameras, scrollFactor, _frame, Note.modchartVertices, colorTransform, blend, antialiasing, quants, stealth, layer, true);
+		modchart.pushDraw(player, parent, cameras, scrollFactor, _frame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer, true);
 	}
 	#end
 }

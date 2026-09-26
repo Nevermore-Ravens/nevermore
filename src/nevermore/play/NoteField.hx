@@ -101,6 +101,11 @@ class NoteField extends BaseField {
 						note.sustain.wasHit = true;
 					}
 
+					note.receptor.glow();
+					if (note.quantization) {
+						note.receptor.color = note.color;
+						note.receptor.quantization = true;
+					}
 					noteHit(note.strumline, note);
 				}
 			} else if (!note.missed && !note.behavior.ignore && note.late) {
@@ -189,6 +194,13 @@ class NoteField extends BaseField {
 	override function released(direction:Int) {
 		if (autoplay) return;
 		held[direction] = false;
+
+		function resetReceptor(strumline:Strumline) {
+			strumline.members[direction].glow('standard');
+		}
+
+		resetReceptor(getStrumline(playerID));
+		for (i in mirrorInputs) resetReceptor(getStrumline(i));
 	}
 
 	// you don't have to do inputs like this
@@ -226,15 +238,20 @@ class NoteField extends BaseField {
 		}
 
 		if (noteToHit != null) {
-			//receptor.glow(null, noteToHit);
+			receptor.glow();
 
 			noteToHit.kill();
 			if (noteToHit.sustain != null) {
 				noteToHit.sustain.wasHit = true;
 			}
+
+			if (noteToHit.quantization) {
+				receptor.color = noteToHit.color;
+				receptor.quantization = true;
+			}
 		} else {
 			receptor.isHolding = true;
-			//receptor.glow('pressed');
+			receptor.glow('pressed');
 		}
 
 		return noteToHit;
@@ -253,7 +270,7 @@ class NoteField extends BaseField {
 
 		final regrabLimit:Float = HitWindows.max / 1000;
 		if (sustain.regrabTimer < regrabLimit && held) {
-			//receptor.glow('standard');
+			receptor.glow('standard');
 		}
 
 		sustain.regrabTimer = held ? regrabLimit : sustain.regrabTimer - FlxG.elapsed;
@@ -289,7 +306,7 @@ class NoteField extends BaseField {
 			sustain.kill();
 			receptor.isHolding = held;
 			if (strumline.ai) {
-				//receptor.glow('standard');
+				receptor.glow('standard');
 				receptor.isHolding = false;
 			}
 			sustain.untilTick = 0; // Hit it one last time, to make sure
@@ -299,8 +316,13 @@ class NoteField extends BaseField {
 		if (sustain.untilTick > 0) return;
 
 		sustain.untilTick = sustainInterval;
-/*		if (strumline.ai || held)
-			receptor.glow(null, sustain);*/
+		if (strumline.ai || held) {
+			receptor.glow();
+			if (sustain.quantization) {
+				receptor.color = sustain.color;
+				receptor.quantization = true;
+			}
+		}
 
 		sustainHit(strumline, sustain, curHolds[curHolds.length - 1] == sustain);
 	}

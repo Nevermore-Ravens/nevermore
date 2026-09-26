@@ -59,6 +59,8 @@ class HitWindows {
 		"Friday Night Funkin' (Week 7)" => [33.34, 91.69, 133.34, 166.67],
 		"Friday Night Funkin'" => [/* 12.5, */45, 90, 135, 160],
 
+		'Quaver (Standard)' => [18, 43, 76, 106, 127], // til this is just osu!mania od7 with bads as 127 and marvs as 18
+
 		// these i got from project outfox
 		// as i really don't have a concrete way of getting these (tmk)
 		'DanceDanceRevolution' => [17, 34, 84, 124, 160],
