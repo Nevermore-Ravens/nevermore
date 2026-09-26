@@ -251,15 +251,15 @@ class NoteField extends BaseField {
 		var playerHeld:Bool = (held || sustain.regrabTimer > 0);
 		var heldKey:Bool = (!strumline.ai && playerHeld) || (strumline.ai && sustain.adjustedTime <= clock.time);
 
-		final regrabLimit = Judgement.max.window / 1000;
+		final regrabLimit:Float = HitWindows.max / 1000;
 		if (sustain.regrabTimer < regrabLimit && held) {
 			//receptor.glow('standard');
 		}
 
 		sustain.regrabTimer = held ? regrabLimit : sustain.regrabTimer - FlxG.elapsed;
-		sustain.regrabAlpha = strumline.ai ? 1 : 0.6 + 0.4 * (sustain.regrabTimer / regrabLimit);
+		sustain.regrabAlpha = strumline.ai ? 1 : (0.6 + 0.4 * (sustain.regrabTimer / regrabLimit));
 
-		final curHolds = strumline.curHolds;
+		final curHolds:Array<Sustain> = strumline.curHolds;
 		if (!heldKey) {
 			if (!strumline.ai) {
 				curHolds.remove(sustain);
