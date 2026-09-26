@@ -1,7 +1,6 @@
 package nevermore.core;
 
 import nevermore.core.*;
-import nevermore.play.NoteBehavior;
 
 class Song {
 	public static var parser:BaseParser = new BaseParser();

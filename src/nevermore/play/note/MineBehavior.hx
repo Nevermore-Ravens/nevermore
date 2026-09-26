@@ -1,7 +1,6 @@
 package nevermore.play.note;
 
 import nevermore.skins.Noteskin;
-import nevermore.play.NoteBehavior;
 
 class MineBehavior extends NoteBehavior {
 	public function new() {

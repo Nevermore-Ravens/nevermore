@@ -6,7 +6,6 @@ import nevermore.modchart.ModchartManager;
 import nevermore.backend.Git.Commit;
 
 import nevermore.play.note.*;
-import nevermore.play.NoteBehavior;
 
 enum abstract ScrollDirection(String) from String to String {
 	var UP = 'Up';

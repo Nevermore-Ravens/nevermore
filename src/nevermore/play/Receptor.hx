@@ -3,7 +3,6 @@ package nevermore.play;
 import flixel.graphics.frames.FlxFrame;
 #if !NEVERMORE_NO_MODCHARTS
 import nevermore.modchart.ModchartManager;
-import nevermore.play.NoteBehavior;
 #end
 import nevermore.play.note.Note;
 

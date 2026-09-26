@@ -5,7 +5,6 @@ import flixel.animation.FlxAnimation;
 import flixel.graphics.frames.FlxFrame;
 import nevermore.core.timing.BaseClock;
 #if !NEVERMORE_NO_MODCHARTS
-import nevermore.play.NoteBehavior;
 import nevermore.modchart.ModchartManager;
 #end
 

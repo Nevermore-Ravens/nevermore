@@ -2,7 +2,6 @@ package nevermore.modchart;
 
 #if !NEVERMORE_NO_MODCHARTS
 import nevermore.play.*;
-import nevermore.play.NoteBehavior;
 import nevermore.modchart.ModchartManager;
 
 /*@:structInit class SetPrep {

@@ -3,7 +3,6 @@ package nevermore.core;
 import nevermore.core.timing.ScrollVelocity;
 import nevermore.core.timing.TimingPoint;
 import nevermore.core.NoteData;
-import nevermore.play.NoteBehavior;
 
 @:structInit
 @:publicFields

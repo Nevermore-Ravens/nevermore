@@ -1,6 +1,5 @@
 package nevermore.play.note;
 
-import nevermore.play.NoteBehavior;
 import nevermore.shaders.NoteShader;
 import nevermore.core.timing.BaseClock;
 import nevermore.modchart.ModchartManager;

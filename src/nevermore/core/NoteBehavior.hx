@@ -1,4 +1,4 @@
-package nevermore.play;
+package nevermore.core;
 
 import nevermore.play.note.BaseNote;
 
@@ -36,7 +36,9 @@ class NoteBehavior {
 	public var punishable:Bool = false;
 
 	public function new() {}
-	public function applySkin(note:BaseNote, type:ObjectType) {note.strumline.skin.applyToNote(note, type == NOTE ? "note" : "sustain");}
+	public function applySkin(note:BaseNote, type:ObjectType) {
+		note.strumline.skin.applyToNote(note, type == NOTE ? "note" : "sustain");
+	}
 	public function setupData(data:NoteData) {}
 	public function setup(note:BaseNote) {}
 
@@ -47,7 +49,6 @@ class NoteBehavior {
 	}
 
 	public function isLate(note:BaseNote):Bool {
-		var deviation:Float = note.adjustedTime - note.clock.time;
-		return deviation < -(HitWindows.max + missPadding);
+		return note.getDeviation() > (HitWindows.max + missPadding);
 	}
 }
