@@ -22,6 +22,8 @@ enum abstract HitWindowType(String) from String to String {
 	var OSU_MANIA_OD9 = 'osu!mania OD9';
 	var OSU_MANIA_OD10 = 'osu!mania OD10';
 
+	var QUAVER = 'Quaver (Standard)';
+
 	var DDR = 'DanceDanceRevolution';
 	var ITG = 'In The Groove';
 
