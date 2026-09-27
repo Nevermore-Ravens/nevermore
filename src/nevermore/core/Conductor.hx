@@ -124,28 +124,28 @@ class Conductor extends flixel.FlxBasic {
 	}
 
 	public static function play() {
-		inst.play();
+		if (inst != null) inst.play();
 		if (vocals != null) vocals.play();
 
 		clock.active = true;
 	}
 
 	public static function stop() {
-		inst.stop();
+		if (inst != null) inst.stop();
 		if (vocals != null) vocals.stop();
 
 		clock.active = false;
 	}
 
 	public static function pause() {
-		inst.pause();
+		if (inst != null) inst.pause();
 		if (vocals != null) vocals.pause();
 
 		clock.active = false;
 	}
 
 	public static function resume() {
-		inst.resume();
+		if (inst != null) inst.resume();
 		if (vocals != null) vocals.resume();
 
 		clock.active = true;
