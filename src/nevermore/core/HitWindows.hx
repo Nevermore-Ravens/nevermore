@@ -22,7 +22,14 @@ enum abstract HitWindowType(String) from String to String {
 	var OSU_MANIA_OD9 = 'osu!mania OD9';
 	var OSU_MANIA_OD10 = 'osu!mania OD10';
 
-	var QUAVER = 'Quaver (Standard)';
+	var QUAVER_PEACEFUL = 'Quaver (Peaceful)';
+	var QUAVER_LENIENT = 'Quaver (Lenient)';
+	var QUAVER_CHILL = 'Quaver (Chill)';
+	var QUAVER_STANDARD = 'Quaver (Standard)';
+	var QUAVER_STRICT = 'Quaver (Strict)';
+	var QUAVER_TOUGH = 'Quaver (Tough)';
+	var QUAVER_EXTREME = 'Quaver (Extreme)';
+	var QUAVER_IMPOSSIBLE = 'Quaver (Impossible)';
 
 	var DDR = 'DanceDanceRevolution';
 	var ITG = 'In The Groove';
@@ -57,11 +64,18 @@ class HitWindows {
 		'osu!mania OD9' => [16, 37, 70, 100, 124],
 		'osu!mania OD10' => [16, 33, 66, 97, 121],
 
+		'Quaver (Peaceful)' => [23, 57, 101, 141, 169],
+		'Quaver (Lenient)' => [21, 52, 91, 128, 153],
+		'Quaver (Chill)' => [19, 47, 83, 116, 139],
+		'Quaver (Standard)' => [18, 43, 76, 106, 127], // til this is basically just osu!mania od7
+		'Quaver (Strict)' => [16, 39, 69, 96, 127],
+		'Quaver (Tough)' => [14, 35, 62, 87, 127],
+		'Quaver (Extreme)' => [13, 32, 57, 79, 127],
+		'Quaver (Impossible)' => [8, 20, 35, 49, 127],
+
 		"Friday Night Funkin' (Legacy)" => [33.34, 125, 150, 166.67],
 		"Friday Night Funkin' (Week 7)" => [33.34, 91.69, 133.34, 166.67],
 		"Friday Night Funkin'" => [/* 12.5, */45, 90, 135, 160],
-
-		'Quaver (Standard)' => [18, 43, 76, 106, 127], // til this is just osu!mania od7 with bads as 127 and marvs as 18
 
 		// these i got from project outfox
 		// as i really don't have a concrete way of getting these (tmk)
