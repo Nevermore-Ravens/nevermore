@@ -22,7 +22,6 @@
 	<haxeflag name="--macro" value="haxe.macro.Compiler.addMetadata('@:build(nevermore.macros.NoteItemMacro.attachNoteItem())', 'flixel.FlxCamera')"/>
 
 	<haxedef name="FLX_NO_TOUCH"/>
-	<haxedef name="FLX_NO_GAMEPAD"/> <!-- for now -->
 
 	<!--
 		NEVERMORE_NO_MODCHARTS
