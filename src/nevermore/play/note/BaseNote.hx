@@ -21,6 +21,8 @@ class BaseNote extends FlxSprite {
 		return time + Nevermore.settings.inputOffset;
 	}
 
+	public var data:NoteData;
+
 	public var multAlpha:Float = 1;
 	public var distance:Float = 0.0;
 	

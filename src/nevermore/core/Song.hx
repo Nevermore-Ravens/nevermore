@@ -34,6 +34,10 @@ class Song {
 		return result;
 	}
 
+	public static function exists(path:String, ?diff:String):Bool {
+		return parser.exists(path, diff);
+	}
+
 	public static function dummyData():Chart {
 		return {
 			title: '',

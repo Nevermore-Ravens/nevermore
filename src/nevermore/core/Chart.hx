@@ -4,6 +4,18 @@ import nevermore.core.timing.ScrollVelocity;
 import nevermore.core.timing.TimingPoint;
 import nevermore.core.NoteData;
 
+@:structInit 
+@:publicFields
+class ChartEvent {
+    var name:String = '';
+    var time:Float = 0.0;
+    var args:Array<Dynamic> = [];
+
+	function toString():String {
+		return 'Name: $name | Time: $time | Arguments: $args';
+	}
+}
+
 @:structInit
 @:publicFields
 class Chart {
@@ -13,6 +25,9 @@ class Chart {
 	var notes:Array<NoteData> = [];
 	var speed:Float = 1;
 	var offset:Float = 0;
+	var events:Array<ChartEvent> = [];
+
+	var meta:Dynamic = null;
 
 	/*
 		some formats (like quaver) reset quant

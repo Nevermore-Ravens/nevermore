@@ -176,7 +176,7 @@ class NoteField extends BaseField {
 	var held:Array<Bool> = [for (i in 0...Nevermore.keyCount) false];
 	var mirrorInputs:Array<Int> = [];
 	override function pressed(direction:Int) {
-		if (autoplay || Nevermore.paused) return;
+		if (autoplay || (!persistentUpdate && Nevermore.paused)) return;
 
 		if (held[direction]) return;
 		held[direction] = true;

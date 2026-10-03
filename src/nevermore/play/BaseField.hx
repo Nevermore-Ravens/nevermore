@@ -16,6 +16,9 @@ class BaseField extends FlxSpriteGroup {
 		return clock;
 	}
 
+	// works like FlxState.persistentUpdate
+	public var persistentUpdate:Bool = false;
+
 	// the note count per strumline
 	// noteCount[0] would be the amount of notes on strumline 0
 	// same for 1 and 2 etc

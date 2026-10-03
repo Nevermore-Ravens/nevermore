@@ -14,4 +14,6 @@ class BaseParser {
 	public function load(path:String, ?diff:String):Chart {
 		return Song.dummyData();
 	}
+
+	public function exists(path:String, ?diff:String):Bool return false;
 }

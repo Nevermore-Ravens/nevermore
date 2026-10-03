@@ -15,10 +15,10 @@ class Controls {
 	public static var initialized:Bool = false;
 
 	public static var keyboard:Input = new Input([
-		0 => [KeyCode.D, KeyCode.LEFT],
-		1 => [KeyCode.F, KeyCode.DOWN],
-		2 => [KeyCode.J, KeyCode.UP],
-		3 => [KeyCode.K, KeyCode.RIGHT]
+		0 => [KeyCode.A, KeyCode.LEFT],
+		1 => [KeyCode.S, KeyCode.DOWN],
+		2 => [KeyCode.SEMICOLON, KeyCode.UP],
+		3 => [KeyCode.SINGLE_QUOTE, KeyCode.RIGHT]
 	]);
 
 	public static var gamepad:Input = new Input([

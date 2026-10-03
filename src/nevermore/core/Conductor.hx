@@ -102,21 +102,26 @@ class Conductor extends flixel.FlxBasic {
 	#end
 
 	// raw sound.time
-	public static var audioTime(get, never):Float;
+	@:isVar public static var audioTime(get, set):Float;
 	static function get_audioTime():Float return clock.audioTime;
+	static function set_audioTime(v:Float):Float return inst.time = v;
 
 	// sound.time + offset
 	public static var songTime(get, never):Float;
 	static function get_songTime():Float return clock.songTime;
 
 	// `songTime` but more smoothed out 
-	//'cause it's trying to predict time
+	// 'cause it's trying to predict time
 	// this is your sync
 	public static var time(get, never):Float;
 	static function get_time():Float return clock.time;
 
 	public static function reset():Void {
 		clock.reset();
+		clock.stepHit.removeAll();
+		clock.beatHit.removeAll();
+		clock.measureHit.removeAll();
+
 		tempo = 120;
 		volume = 1.0;
 		rate = 1.0;

@@ -4,9 +4,6 @@ import nevermore.core.timing.TimingMap;
 import nevermore.core.timing.TimingPoint;
 
 class Util {
-	public static final colors:Array<String> = ['purple', 'blue', 'green', 'red'];
-	public static final directions:Array<String> = ['left', 'down', 'up', 'right'];
-
 	public static var snaps:Array<Int> = [
 		4,
 		8,

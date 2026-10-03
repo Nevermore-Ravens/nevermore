@@ -1,6 +1,7 @@
 package nevermore.skins;
 
 import nevermore.play.note.BaseNote;
+import nevermore.play.note.Note;
 import flixel.graphics.frames.FlxFramesCollection;
 
 class Noteskin {
@@ -38,16 +39,16 @@ class Noteskin {
 				animations: [
 					{
 						name: "standard",
-						prefixes: [for (dir in Util.directions) 'arrow${dir.toUpperCase()}'],
+						prefixes: [for (dir in Note.directions) 'arrow${dir.toUpperCase()}'],
 						looped: true
 					},
 					{
 						name: "pressed",
-						prefixes: [for (dir in Util.directions) '$dir press']
+						prefixes: [for (dir in Note.directions) '$dir press']
 					},
 					{
 						name: "glow",
-						prefixes: [for (dir in Util.directions) '$dir confirm']
+						prefixes: [for (dir in Note.directions) '$dir confirm']
 					},
 				]
 			},
@@ -57,7 +58,7 @@ class Noteskin {
 				spritesheet: key,
 				animations: [{
 					name: "standard",
-					prefixes: [for (col in Util.colors) '${col}0'],
+					prefixes: [for (col in Note.colors) '${col}0'],
 					looped: true
 				}]
 			},
@@ -68,12 +69,12 @@ class Noteskin {
 				animations: [
 					{
 						name: "piece",
-						prefixes: [for (col in Util.colors) '${col} hold piece'],
+						prefixes: [for (col in Note.colors) '${col} hold piece'],
 						looped: true
 					},
 					{
 						name: "tail",
-						prefixes: [for (col in Util.colors) '${col} hold end'],
+						prefixes: [for (col in Note.colors) '${col} hold end'],
 						looped: true
 					}
 				]
@@ -85,12 +86,12 @@ class Noteskin {
 				animations: [
 					{
 						name: "piece",
-						prefixes: [for (col in Util.colors) '${col} roll piece'],
+						prefixes: [for (col in Note.colors) '${col} roll piece'],
 						looped: true
 					},
 					{
 						name: "tail",
-						prefixes: [for (col in Util.colors) '${col} roll end'],
+						prefixes: [for (col in Note.colors) '${col} roll end'],
 						looped: true
 					}
 				]

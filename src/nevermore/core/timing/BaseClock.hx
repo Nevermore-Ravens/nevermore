@@ -79,10 +79,6 @@ class BaseClock {
 		rate = 1.0;
 
 		timingMap.reset(timingPoints ?? []);
-
-		stepHit.removeAll();
-		beatHit.removeAll();
-		measureHit.removeAll();
 	}
 
 	public var stepHit:FlxTypedSignal<Int -> Void>;

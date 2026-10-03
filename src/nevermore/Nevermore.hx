@@ -108,6 +108,7 @@ class Nevermore {
 		#end
 
 		FlxG.signals.postStateSwitch.add(() -> {
+			FlxG.camera.bgColor = 0x00;
 			Assets.cache.clearUnused();
 		});
 

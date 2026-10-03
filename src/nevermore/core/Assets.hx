@@ -73,7 +73,10 @@ class AssetHandler {
 	}
 
 	public function text(key:String):String {
-		return sys.io.File.getContent(getPath(key));
+		key = getPath(key);
+		if (!FileSystem.exists(key)) return '';
+
+		return sys.io.File.getContent(key);
 	}
 
 	// no need to cache something like this
@@ -198,7 +201,7 @@ class AssetCache {
 		System.gc();
 	}
 
-	function destroyAsset(key:String, ?asset:AssetData) {
+	public function destroyAsset(key:String, ?asset:AssetData) {
 		asset ??= map[key];
 		if (asset == null) return;
 
