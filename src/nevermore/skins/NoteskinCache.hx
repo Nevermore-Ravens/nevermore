@@ -43,10 +43,12 @@ class NoteskinCache {
 		for (i in 0...attempts) {
 			var loadKey = getLoadKey();
 			var jsonPath = loadKey + ".json";
-			if (Assets.exists(jsonPath)) {
+			var existsOnMain = Assets.exists(jsonPath);
+			if (existsOnMain || Assets.dependency.exists(jsonPath)) {
 				try {
-					var json = haxe.Json.parse(Assets.text(jsonPath));
-					return new Noteskin(json);
+					var content = existsOnMain ? Assets.text(jsonPath) : Assets.dependency.text(jsonPath);
+					var json = haxe.Json.parse(content);
+					return new Noteskin(json, preferQuants && !quants);
 				} catch (e) {
 					quants = false;
 				}
@@ -57,7 +59,7 @@ class NoteskinCache {
 		quants = preferQuants;
 		for (i in 0...attempts) {
 			var loadKey = getLoadKey();
-			if (Assets.exists(loadKey + ".xml"))
+			if (Assets.exists(loadKey + ".xml") || Assets.dependency.exists(loadKey + ".xml"))
 				return Noteskin.basic(loadKey);
 			else
 				quants = false;

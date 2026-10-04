@@ -19,7 +19,11 @@ class SparrowSection extends NoteskinSection<String> {
 	}
 
 	function loadFrames(path:String) {
-		return Assets.sparrowAtlas(path);
+		for (handler in [Assets.main, Assets.dependency]) {
+			if (handler.exists(path + ".xml"))
+				return handler.sparrowAtlas(path);
+		}
+		return null;
 	}
 	function getBackupAnim():NoteskinAnim<String> {
 		return {name: "", prefixes: [for (i in 0...Nevermore.keyCount) ""]};
