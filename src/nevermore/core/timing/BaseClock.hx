@@ -104,13 +104,13 @@ class BaseClock {
 	public var measureSound:FlxSound;
 
 	public var step:Float;
-	var fStep:Int;
+	var iStep:Int;
 
 	public var beat:Float;
-	var fBeat:Int;
+	var iBeat:Int;
 
 	public var measure:Float;
-	var fMeasure:Int;
+	var iMeasure:Int;
 
 	// TODO:
 	// for some reason when starting with negative time (ie positive offset)
@@ -127,13 +127,13 @@ class BaseClock {
 		measure = timingMap.getMeasure(pos, point);
 
 		var nextStep:Int = Std.int(step);
-		if (nextStep != fStep) {
-			stepHit.dispatch(fStep = nextStep);
+		if (nextStep != iStep) {
+			stepHit.dispatch(iStep = nextStep);
 		}
 
 		var nextBeat:Int = Std.int(beat);
-		if (nextBeat != fBeat) {
-			beatHit.dispatch(fBeat = nextBeat);
+		if (nextBeat != iBeat) {
+			beatHit.dispatch(iBeat = nextBeat);
 			if (metronome) {
 				var newMeasure:Bool = nextBeat % timingMap.beatsPerMeasure == 0;
 				(newMeasure ? measureSound : metronomeSound).play(true);
@@ -141,8 +141,8 @@ class BaseClock {
 		}
 
 		var nextMeasure:Int = Std.int(measure);
-		if (nextMeasure != fMeasure) {
-			measureHit.dispatch(fMeasure = nextMeasure);
+		if (nextMeasure != iMeasure) {
+			measureHit.dispatch(iMeasure = nextMeasure);
 		}
 	}
 }
