@@ -49,7 +49,8 @@ class BaseClock {
 		beatHit = new FlxTypedSignal<Int -> Void>();
 		measureHit = new FlxTypedSignal<Int -> Void>();
 
-		metronomeSound = new FlxSound(); //FlxG.sound.load(Assets.dependency.audio('sfx/metronome.wav')); //??????????????????????????????????????????????????????????????????????????????
+		metronomeSound = FlxG.sound.load(Assets.dependency.audio('sfx/metronome.wav'));
+		measureSound = FlxG.sound.load(Assets.dependency.audio('sfx/metronome measure.wav'));
 	}
 
 	public function destroy() {
@@ -100,6 +101,7 @@ class BaseClock {
 
 	public var metronome:Bool = true;
 	public var metronomeSound:FlxSound;
+	public var measureSound:FlxSound;
 
 	public var step:Float;
 	var fStep:Int;
@@ -132,7 +134,10 @@ class BaseClock {
 		var nextBeat:Int = Std.int(beat);
 		if (nextBeat != fBeat) {
 			beatHit.dispatch(fBeat = nextBeat);
-			if (metronome) metronomeSound.play(true);
+			if (metronome) {
+				var newMeasure:Bool = nextBeat % timingMap.beatsPerMeasure == 0;
+				(newMeasure ? measureSound : metronomeSound).play(true);
+			}
 		}
 
 		var nextMeasure:Int = Std.int(measure);
