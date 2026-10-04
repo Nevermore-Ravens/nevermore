@@ -243,6 +243,7 @@ class NoteField extends BaseField {
 			noteToHit.kill();
 			if (noteToHit.sustain != null) {
 				noteToHit.sustain.wasHit = true;
+				receptor.isHolding = true;
 			}
 
 			if (noteToHit.quantization) {
@@ -269,24 +270,28 @@ class NoteField extends BaseField {
 		var heldKey:Bool = (!strumline.ai && playerHeld) || (strumline.ai && sustain.adjustedTime <= clock.time);
 
 		final regrabLimit:Float = HitWindows.max / 1000;
-		if (sustain.regrabTimer < regrabLimit && held) {
+
+		if (sustain.regrabTimer < regrabLimit && held && !strumline.ai) { // regrab logic would never happen in botplay
 			receptor.glow('standard');
 		}
 
-		sustain.regrabTimer = held ? regrabLimit : sustain.regrabTimer - FlxG.elapsed;
-		sustain.regrabAlpha = strumline.ai ? 1 : (0.6 + 0.4 * (sustain.regrabTimer / regrabLimit));
-
 		final curHolds:Array<Sustain> = strumline.curHolds;
-		if (!heldKey) {
-			if (!strumline.ai) {
-				curHolds.remove(sustain);
-				sustain.regrabAlpha = 0.2;
-				sustain.wasHit = false;
-				sustainDropped(sustain.strumline, sustain);
-			}
+		if (!strumline.ai) {
+			sustain.regrabTimer = held ? regrabLimit : sustain.regrabTimer - FlxG.elapsed;
 
-			return;
+			if (!heldKey) {
+				if (!strumline.ai) {
+					curHolds.remove(sustain);
+					sustain.regrabAlpha = 0.2;
+					sustain.wasHit = false;
+					sustainDropped(sustain.strumline, sustain);
+				}
+
+				return;
+			}
 		}
+
+		sustain.regrabAlpha = strumline.ai ? 1 : (0.6 + 0.4 * (sustain.regrabTimer / regrabLimit));
 
 		// only clip if it's past the sustain
 		if (!scrollVelocities)
