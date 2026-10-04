@@ -13,6 +13,18 @@ class AssetHandler {
 		this.root = root;
 	}
 
+	public var imageFormats:Array<String> = ['png', 'jpg', 'jpeg'];
+
+	// flac/mp3 are 8.4.0 only
+	// because of sdl_sound support
+	public var audioFormats:Array<String> = [
+		#if (lime >= version("8.4.0"))
+		'ogg', 'wav', 'flac', 'mp3'
+		#else
+		'ogg', 'wav'
+		#end
+	];
+
 	public function image(key:String):FlxGraphic {
 		if (key.lastIndexOf('.') < 0) key += '.${Assets.imageExt}';
 		var path = getPath(key);
