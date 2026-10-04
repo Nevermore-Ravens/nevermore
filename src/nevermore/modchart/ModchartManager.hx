@@ -45,6 +45,7 @@ class ModchartManager {
 
 	public var timeline:ModchartTimeline;
 	public var strumlineCount:Int = 0;
+
 	public var parent:BaseField;
 	public var laneCount:Int = 4;
 	public var curLane:Int = 0;
@@ -300,6 +301,7 @@ class ModchartManager {
 
 
 	public function update() {
+		
 		for (mod in allMods)
 			mod.releaseCache();
 		for (aux in allAuxes)
@@ -472,8 +474,10 @@ class ModchartManager {
 		});
 	}
 
+	var drawnOnce = false;
 	public function drawQueues() {
-		queuedDraws.sort(sortQueues);
+		if (!drawnOnce) // no need to sort if its already been sorted
+			queuedDraws.sort(sortQueues);
 
 		for (queue in queuedDraws) {
 			for (camera in queue.cameras) {
@@ -501,8 +505,13 @@ class ModchartManager {
 				}
 			}
 		}
+		drawnOnce = true;
+	}
 
-		queuedDraws.resize(0);
+	public function killAllQueues() {
+		if (queuedDraws != null)
+			queuedDraws.resize(0);
+		drawnOnce = false;
 	}
 
 	function sortQueues(a:QueuedDraw, b:QueuedDraw) {

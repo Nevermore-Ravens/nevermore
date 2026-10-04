@@ -346,49 +346,58 @@ class NoteField extends BaseField {
 		sustainHit(strumline, sustain, curHolds[curHolds.length - 1] == sustain);
 	}
 
+	
+	var queueFramerate:Float = Nevermore.settings.notefieldFramerate;
+	var queueTimer:Float = 1000; // Force draw on first frame
+	
 	override function draw():Void {
 		if (modchart == null) {
 			super.draw();
 			return;
 		}
 
-		modchart.prepare();
+		queueTimer += FlxG.elapsed;
+		if (queueTimer >= 1.0/queueFramerate) {
+			modchart.killAllQueues();
+			modchart.prepare();
+
+			for (i => strumline in strumlines.members) {
+				if (!strumline.visible) continue;
+
+				for (strum in strumline.members) {
+					if (!strum.visible) continue;
+					strum.preDrawCrazy(modchart, i, strumline.direction);
+				}
+			}
+
+			for (sustain in sustains.members) {
+				if (!sustain.exists || !sustain.visible) continue;
+
+				sustain.drawCrazy(modchart, sustain.strumline.direction);
+			}
+
+			for (i => strumline in strumlines.members) {
+				if (!strumline.visible) continue;
+
+				for (strum in strumline.members) {
+					if (!strum.visible) continue;
+					strum.drawCrazy(modchart, i, strumline.direction);
+				}
+			}
+
+			for (note in notes.members) {
+				if (!note.exists || !note.visible) continue;
+
+				note.drawCrazy(modchart, note.strumline.direction);
+			}
+			queueTimer = 0;
+		}
 
 		var oldDefaultCameras = null;
 		@:privateAccess {
 			oldDefaultCameras = FlxCamera._defaultCameras;
 			if (cameras != null)
 				FlxCamera._defaultCameras = cameras;
-		}
-
-		for (i => strumline in strumlines.members) {
-			if (!strumline.visible) continue;
-
-			for (strum in strumline.members) {
-				if (!strum.visible) continue;
-				strum.preDrawCrazy(modchart, i, strumline.direction);
-			}
-		}
-
-		for (sustain in sustains.members) {
-			if (!sustain.exists || !sustain.visible) continue;
-
-			sustain.drawCrazy(modchart, sustain.strumline.direction);
-		}
-
-		for (i => strumline in strumlines.members) {
-			if (!strumline.visible) continue;
-
-			for (strum in strumline.members) {
-				if (!strum.visible) continue;
-				strum.drawCrazy(modchart, i, strumline.direction);
-			}
-		}
-
-		for (note in notes.members) {
-			if (!note.exists || !note.visible) continue;
-
-			note.drawCrazy(modchart, note.strumline.direction);
 		}
 
 		modchart.drawQueues();

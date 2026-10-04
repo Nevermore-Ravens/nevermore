@@ -63,6 +63,9 @@ class NevermoreSettings {
 	 * but otherwise higher values for casual play.
 	**/
 	var holdGrain:Int = 5;
+
+	// How many times the NOTEFIELDS will render per second! setting this to your monitor's HZ value or double is recommended.
+	var notefieldFramerate = 60;
 }
 
 class Nevermore {
