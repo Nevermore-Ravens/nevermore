@@ -10,6 +10,6 @@ class OpponentSwap extends BaseModifier {
 
 	override function modifiesPosition(_):Bool {return true;}
 	override function adjustPos(_, pos:Vector3, _, _, _, _, _, field:Strumline, _) {
-		pos.x += ((FlxG.width - field.centerX) - field.centerX) * opponentSwap;
+		pos.x += ((FlxG.width - field.x) - field.x) * opponentSwap;
 	}
 }

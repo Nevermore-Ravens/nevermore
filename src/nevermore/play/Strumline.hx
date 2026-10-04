@@ -14,12 +14,19 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 
 	public var size(default, set):Float = 1;
 	function set_size(v:Float):Float {
-		size = v;
-		regen();
-		return v;
+		var scaleMult:Float = v / size;
+		for (receptor in members) {
+			receptor.x = (receptor.x - x) * scaleMult + x;
+			receptor.scale.scale(scaleMult);
+
+			// looks schizo but i'm basically trying to update the hitbox without screwing up the original values
+			receptor.width *= scaleMult;
+			receptor.height *= scaleMult;
+			receptor.centerOffsets();
+		}
+		return size = v;
 	}
 
-	public var centerX:Float;
 	public var skin(default, set):Noteskin;
 	function set_skin(v:Noteskin):Noteskin {
 		skin = v;
@@ -39,9 +46,6 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 		this.modchartY = y;
 	}
 
-	// TODO:
-	// figure out a way to separate the 0.65 ?
-	// because fnf has a size of 0.7 and what not
 	public var constantSize(get, never):Float;
 	function get_constantSize():Float {
 		return skin.spacing * size;
@@ -62,16 +66,6 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 		this.moves = false;
 		super(x, y);
 		this.skin = skin;
-
-		// center the strumline on the x position we gave it
-		// instead of basing the x position on the left side of the x axis
-		this.x = x - (width * 0.5);
-		centerX = x;
-	}
-
-	override function set_x(v:Float):Float {
-		centerX += v - x;
-		return super.set_x(v);
 	}
 
 	function regen() {
@@ -84,7 +78,7 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 			receptor.scale.scale(size);
 			receptor.updateHitbox();
 
-			receptor.x += constantSize * i;
+			receptor.x += constantSize * (i - keyCount * 0.5);
 			receptor.y += (constantSize - receptor.height) * 0.5;
 		}
 

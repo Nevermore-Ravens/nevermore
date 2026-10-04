@@ -13,14 +13,14 @@ class Zoom extends BaseModifier {
 
 	override function modifiesPosition(_) {return true;}
 	override function adjustPos(_, pos:Vector3, _, _, _, _, _, field:Strumline, _) {
-		pos.x -= field.centerX;
+		pos.x -= field.x;
 		pos.y -= FlxG.height * 0.5;
 
 		final mainZoom = zoom - mini * 0.5;
 		pos.x *= mainZoom * zoomX;
 		pos.y *= mainZoom * zoomY;
 
-		pos.x += field.centerX;
+		pos.x += field.x;
 		pos.y += FlxG.height * 0.5;
 	}
 

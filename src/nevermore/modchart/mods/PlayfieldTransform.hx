@@ -33,12 +33,12 @@ class PlayfieldTransform extends BaseModifier {
 		vertex.y += FlxG.height * 0.5;
 
 		// local pitch
-		vertex.x -= field.centerX;
+		vertex.x -= field.x;
 		vertex.y -= field.y;
 
 		vertex.rotate(localPitch, localYaw, localRoll);
 
-		vertex.x += field.centerX;
+		vertex.x += field.x;
 		vertex.y += field.y;	
 	}
 }

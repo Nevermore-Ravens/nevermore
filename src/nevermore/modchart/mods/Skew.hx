@@ -11,13 +11,13 @@ class Skew extends BaseModifier {
 
 	override function modifiesVertex(_) {return true;}
 	override function adjustVertex(_, vertex:Vector3, _, _, _, _, _, _, field:Strumline, _) {
-		vertex.x -= field.centerX;
+		vertex.x -= field.x;
 		vertex.y -= FlxG.height * 0.5;
 
 		vertex.x += vertex.y * skewX;
 		vertex.y += FlxG.height * vertex.x / (field.constantSize * 4) * skewY;
 
-		vertex.x += field.centerX;
+		vertex.x += field.x;
 		vertex.y += FlxG.height * 0.5;
 	}
 }

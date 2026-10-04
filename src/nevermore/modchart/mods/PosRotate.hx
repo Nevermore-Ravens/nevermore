@@ -24,7 +24,7 @@ class PosRotate extends BaseModifier {
 
 	override function modifiesPosition(_):Bool {return true;}
 	override function adjustPos(_, pos:Vector3, _, _, _, lane:Int, _, field:Strumline, _) {
-		pos.x -= field.centerX;
+		pos.x -= field.x;
 		pos.y -= FlxG.height * 0.5;
 
 		final localX = localRotateX + localRotateXLANE;
@@ -34,7 +34,7 @@ class PosRotate extends BaseModifier {
 			pos.rotate(localX, localY, localZ);
 
 		final strumPos = field.constantSize * (lane - 1.5);
-		pos.x -= strumPos; // technically pos.x -= (centerX + strumPos) but we already offset centerX
+		pos.x -= strumPos; // technically pos.x -= (field.x + strumPos) but we already offset field.x
 		// no need to offset height again.
 
 		final normX = rotateX + rotateXLANE;
@@ -43,7 +43,7 @@ class PosRotate extends BaseModifier {
 		if (normX != 0.0 || normY != 0.0 || normZ != 0.0)
 			pos.rotate(normX, normY, normZ);
 
-		pos.x += field.centerX + strumPos;
+		pos.x += field.x + strumPos;
 		pos.y += FlxG.height * 0.5;
 	}
 }
