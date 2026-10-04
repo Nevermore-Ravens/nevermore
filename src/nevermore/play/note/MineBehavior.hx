@@ -32,7 +32,7 @@ class MineBehavior extends NoteBehavior {
 	override function update(delta:Float, notes:Array<Note>) {
 		for (i in 0...notes.length) {
 			var note:Note = notes[i];
-			note.angle += delta * 360.;
+			note.angle = (note.field.velocityClock.map.getPosition(note.field.clock.time) - note.visualTime) * (Util.crotchet(note.field.clock.timingMap.tempo)/1000);
 		}
 	}
 
