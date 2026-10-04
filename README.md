@@ -3,6 +3,8 @@ NONE OF THIS IS FINAL !!!!!!!!!!! im still trying to move stuff over from camell
 so some shit is hardcoded for now (like receptor animations)  
 until i can figure out a good way to separate it it's gonna be a little messy
 
+also myceli was here
+
 # <div align="center">Nevermore</div>
 <div align="center">
 Nevermore is a rhythm game engine made in HaxeFlixel.  
