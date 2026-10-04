@@ -66,6 +66,7 @@ class NoteField extends BaseField {
 		notes.active = false;
 
 		for (line in lines ?? []) {
+			line.field = this;
 			strumlines.add(line);
 		}
 
@@ -84,11 +85,17 @@ class NoteField extends BaseField {
 	override function update(delta:Float) {
 		super.update(delta);
 
+		var checkForUpdates = false;
 		for (i in 0 ... notes.length) {
 			var note:Note = notes.members[i];
 
 			if (!note.passedStrumline) checkAssistTick(note);
 			if (!note.exists) continue;
+
+			if (note.behavior != NoteBehavior.base && !checkForUpdates) {
+				checkForUpdates = true; // This makes sure that we don't do mapchecks every frame by seeing if notetypes exist.
+			}
+
 
 			if (note.active) note.update(delta);
 			note.move(scrollVelocities ? velocityClock : clock);
@@ -115,6 +122,13 @@ class NoteField extends BaseField {
 
 			if (note.adjustedTime < clock.time - killDelay) {
 				note.kill();
+			}
+		}
+
+		if (checkForUpdates) {
+			for (i in NoteBehavior.getListOfBehaviours()) {
+				var notesToCheck:Array<Note> = [for (n in notes.members) {if (n.behavior == i) n;}];
+				i.update(delta, notesToCheck);
 			}
 		}
 

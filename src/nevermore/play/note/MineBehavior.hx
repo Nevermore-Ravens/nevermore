@@ -29,6 +29,13 @@ class MineBehavior extends NoteBehavior {
 		data.length = 0;
 	}
 
+	override function update(delta:Float, notes:Array<Note>) {
+		for (i in 0...notes.length) {
+			var note:Note = notes[i];
+			note.angle += delta * 360.;
+		}
+	}
+
 	override function setup(note:BaseNote) {
 		note.quantization = false;
 		note.color = 0xFFFFFFFF;

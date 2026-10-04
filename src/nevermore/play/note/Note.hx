@@ -34,6 +34,9 @@ class Note extends BaseNote {
 
 		this.data = data;
 		this.strumline = strumline;
+		this.field = strumline.field;
+
+		angle = 0;
 
 		sustain = null;
 		passedStrumline = false;

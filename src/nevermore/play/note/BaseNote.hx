@@ -12,6 +12,7 @@ class BaseNote extends FlxSprite {
 	public var behavior:NoteBehavior;
 
 	public var strumline:Strumline;
+	public var field:NoteField;
 	public var receptor:Receptor;
 
 	public var passedStrumline:Bool;
