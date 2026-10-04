@@ -14,16 +14,17 @@ class NoteskinCache {
 
 	public function get(key:String, ?quants:Bool = false) {
 		set(key, quants);
-		return list.get(key);
+		return list.get(quants ? key + "-quant" : key);
 	}
 
 	public function set(key:String, ?quants:Bool = false) {
-		if (exists(key)) return;
-
+		var mapKey = quants ? key + "-quant" : key; 
+		if (exists(mapKey)) return;
+		
 		var data = getData(key, quants);
 		if (data == null) return;
-
-		list.set(key, data);
+		
+		list.set(mapKey, data);
 	}
 
 	public function create(key:String, quants:Bool):Noteskin {
