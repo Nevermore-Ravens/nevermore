@@ -103,6 +103,10 @@ class Noteskin {
 	 * Used for sharing frame collections across sections.
 	 */
 	private var frames:Map<String, FlxFramesCollection> = [];
+	/**
+	 * Whether or not noteskin section spritesheets should try to search for a -quant variant first.
+	 */
+	private var findQuants:Bool = false;
 	public var sections:Map<String, NoteskinSection<Dynamic>> = [];
 
 	public var spacing:Float = 160 * 0.7;
@@ -123,7 +127,8 @@ class Noteskin {
 			sect.scale = factor * (set ? 1 : sect.scale);
 	}
 
-	public function new(data:Dynamic) {
+	public function new(data:Dynamic, ?findQuants:Bool = false) {
+		this.findQuants = findQuants;
 		var instanceFields = Type.getInstanceFields(Noteskin);
 		var fields = Reflect.fields(data);
 
@@ -152,7 +157,10 @@ class Noteskin {
 		if (frames.exists(path))
 			return frames.get(path);
 
-		var newFrames = fallback(path);
+		var newFrames = fallback(findQuants ? path + "-quant" : path);
+		if (newFrames == null && findQuants)
+			newFrames = fallback(path);
+
 		frames.set(path, newFrames);
 		return newFrames;
 	}
