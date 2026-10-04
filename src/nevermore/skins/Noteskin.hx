@@ -111,6 +111,7 @@ class Noteskin {
 
 	public var spacing:Float = 160 * 0.7;
 	public var scale:Float = 0.7;
+	public var supportsXKeys = false;
 	public var antialiasing:Bool = true;
 
 	/**

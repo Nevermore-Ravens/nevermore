@@ -15,7 +15,7 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 
 	public var size(default, set):Float = 1;
 	function set_size(v:Float):Float {
-		var scaleMult:Float = v / size;
+		var scaleMult:Float = (v / size) * (4 / keyCount);
 		for (receptor in members) {
 			receptor.x = (receptor.x - x) * scaleMult + x;
 			receptor.scale.scale(scaleMult);
@@ -75,7 +75,7 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 		var receptor:Receptor = null;
 		for (i in 0...keyCount) {
 			add(receptor = new Receptor(this, i));
-			if (skin != null) skin.apply(receptor, i, "receptor");
+			if (skin != null) skin.apply(receptor, !skin.supportsXKeys ? i % 4: i, "receptor");
 			receptor.scale.scale(size);
 			receptor.updateHitbox();
 

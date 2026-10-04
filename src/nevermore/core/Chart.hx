@@ -25,6 +25,7 @@ class Chart {
 	var notes:Array<NoteData> = [];
 	var speed:Float = 1;
 	var offset:Float = 0;
+	var keyCount:Int = 4;
 	var events:Array<ChartEvent> = [];
 
 	var meta:Dynamic = null;

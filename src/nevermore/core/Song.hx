@@ -8,7 +8,7 @@ class Song {
 		if (parser == null) return dummyData();
 		
 		var result:Chart = parser.load(path, diff);
-
+		
 		var cleanedNotes = [];
 		for (i => note in result.notes) {
 			if (i != 0) {
