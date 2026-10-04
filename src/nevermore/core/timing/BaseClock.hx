@@ -99,7 +99,7 @@ class BaseClock {
 		updateBeats(songTime);
 	}
 
-	public var metronome:Bool = true;
+	public var metronome:Bool = false;
 	public var metronomeSound:FlxSound;
 	public var measureSound:FlxSound;
 
