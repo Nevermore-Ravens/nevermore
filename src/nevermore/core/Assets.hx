@@ -26,7 +26,7 @@ class AssetHandler {
 	];
 
 	public function image(key:String):FlxGraphic {
-		if (key.lastIndexOf('.') < 0) key += '.${Assets.imageExt}';
+		if (key.lastIndexOf('.') < 0) key += '.${imageFormats[0]}';
 		var path = getPath(key);
 		if (Assets.cache.exists(path)) {
 			return switch Assets.cache.get(path).src {
@@ -45,7 +45,7 @@ class AssetHandler {
 	}
 
 	public function audio(key:String):Sound {
-		if (key.lastIndexOf('.') < 0) key += '.${Assets.audioExt}';
+		if (key.lastIndexOf('.') < 0) key += '.${audioFormats[0]}';
 		var path = getPath(key);
 		if (Assets.cache.exists(path)) {
 			return switch Assets.cache.get(path).src {
@@ -67,7 +67,7 @@ class AssetHandler {
 	// somehow figure out how to make it work for pre-8.4.0?
 	public function streamedAudio(key:String):Sound {
 		#if (lime >= version("8.4.0"))
-		if (key.lastIndexOf('.') < 0) key += '.${Assets.audioExt}';
+		if (key.lastIndexOf('.') < 0) key += '.${audioFormats[0]}';
 		var path = getPath(key);
 		if (Assets.cache.exists(path)) {
 			return switch Assets.cache.get(path).src {
@@ -118,6 +118,10 @@ class AssetHandler {
 		return sys.FileSystem.exists(getPath(key));
 	}
 
+	public function getExtension(key:String, list:Array<String>):String {
+		return '';
+	}
+
 	public dynamic function getPath(key:String):String {
 		return '$root/$key';
 	}
@@ -125,8 +129,6 @@ class AssetHandler {
 
 // basically just a wrapper for `main`
 class Assets {
-	public static var imageExt:String = 'png';
-	public static var audioExt:String = 'ogg';
 	public static var rootFolder:String = 'assets';
 
 	public static var main:AssetHandler;
