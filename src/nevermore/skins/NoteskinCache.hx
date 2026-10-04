@@ -42,8 +42,8 @@ class NoteskinCache {
 		var attempts = quants ? 2 : 1;
 		for (i in 0...attempts) {
 			var loadKey = getLoadKey();
-			var jsonPath = Assets.getPath(loadKey + ".json");
-			if (sys.FileSystem.exists(jsonPath)) {
+			var jsonPath = loadKey + ".json";
+			if (Assets.exists(jsonPath)) {
 				try {
 					var json = haxe.Json.parse(Assets.text(jsonPath));
 					return new Noteskin(json);
@@ -57,7 +57,7 @@ class NoteskinCache {
 		quants = preferQuants;
 		for (i in 0...attempts) {
 			var loadKey = getLoadKey();
-			if (sys.FileSystem.exists(Assets.getPath(loadKey + ".xml")))
+			if (Assets.exists(loadKey + ".xml"))
 				return Noteskin.basic(loadKey);
 			else
 				quants = false;

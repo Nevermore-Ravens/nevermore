@@ -102,6 +102,10 @@ class AssetHandler {
 		return parentFrames;
 	}
 
+	public function exists(key:String):Bool {
+		return sys.FileSystem.exists(getPath(key));
+	}
+
 	public dynamic function getPath(key:String):String {
 		return '$root/$key';
 	}
@@ -146,6 +150,10 @@ class Assets {
 
 	public static function multiAtlas(keys:Array<String>):FlxAtlasFrames {
 		return main.multiAtlas(keys);
+	}
+
+	public static function exists(key:String):Bool {
+		return main.exists(key);
 	}
 
 	public static function getPath(key:String):String {
