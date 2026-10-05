@@ -115,6 +115,9 @@ class BaseClock {
 	// TODO:
 	// for some reason when starting with negative time (ie positive offset)
 	// beat hits at 0 just don't seem to occur at all ?
+	//
+	// also maybe add stepsPerBeat support later
+	// (if i can figure out how the fuck it works)
 	function updateBeats(pos:Float) {
 		var point:TimingPoint = null;
 		
