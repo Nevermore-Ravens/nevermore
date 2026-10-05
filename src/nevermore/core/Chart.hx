@@ -37,7 +37,7 @@ class Chart {
 	*/
 	var snapRelativeToChanges:Bool = true;
 
-	// gets the amount of chords in this chart
+	// gets the amount of chords in the chart
 	// this does NOT work like etterna !!! it is ROW based
 	// which means quads will not count as 2 jumps
 	// hands don't count as a jump
