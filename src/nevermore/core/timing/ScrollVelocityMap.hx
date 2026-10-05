@@ -12,7 +12,6 @@ class ScrollVelocityMap {
 		list ??= [];
 		
 		length = list.length;
-		list.sort((a, b) -> return Std.int(a.time - b.time));
 
 		for (i in 1...list.length) {
 			list[i].visualTime = list[i - 1].toPixels(list[i].time);

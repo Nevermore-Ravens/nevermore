@@ -9,7 +9,7 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 	public var keyCount(default, set):Int = 4;
 	function set_keyCount(v:Int):Int {
 		keyCount = v;
-		if (!ai) InputManager.currentKeyCount = v;
+		if (!ai) InputManager.keyCount = v;
 		regen();
 		size = size;
 		return v;

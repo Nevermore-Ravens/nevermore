@@ -149,4 +149,16 @@ class Chart {
 
 		return count;
 	}
+
+	function sortNotes() {
+		notes.sort((a, b) -> return Std.int(a.time - b.time));
+	}
+
+	function sortTimingPoints() {
+		timingPoints.sort((a, b) -> return Std.int(a.time - b.time));
+	}
+
+	function sortScrollVelocities() {
+		scrollVelocities.sort((a, b) -> return Std.int(a.time - b.time));
+	}
 }

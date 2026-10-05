@@ -8,8 +8,9 @@ class Song {
 		if (parser == null) return dummyData();
 		
 		var result:Chart = parser.load(path, diff);
+		result.sortNotes(); // sort it before in case we miss a stacked note
 		
-		var cleanedNotes = [];
+		var cleanedNotes:Array<NoteData> = [];
 		for (i => note in result.notes) {
 			if (i != 0) {
 				for (evilNote in cleanedNotes) {
@@ -30,7 +31,8 @@ class Song {
 		}
 
 		result.notes = cleanedNotes.filter(function(note:NoteData) return note != null);
-		result.notes.sort((a, b) -> return Std.int(a.time - b.time));
+		result.sortTimingPoints();
+		result.sortScrollVelocities();
 		return result;
 	}
 
