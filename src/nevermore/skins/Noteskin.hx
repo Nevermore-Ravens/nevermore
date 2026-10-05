@@ -146,7 +146,7 @@ class Noteskin {
 	}
 
 	public function apply(to:FlxSprite, lane:Int, section:String) {
-		sections.get(section).apply(to, lane);
+		sections.get(section).apply(to, supportsXKeys ? lane : lane % 4);
 	}
 	public function applyToNote(to:BaseNote, section:String) {
 		inline apply(to, to.lane, section);

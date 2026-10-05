@@ -26,6 +26,6 @@ class SparrowSection extends NoteskinSection<String> {
 		return null;
 	}
 	function getBackupAnim():NoteskinAnim<String> {
-		return {name: "", prefixes: [for (i in 0...Nevermore.keyCount) ""]};
+		return {name: "", prefixes: [for (i in 0...((!parent.supportsXKeys ? 4 : Nevermore.keyCount))) ""]};
 	}
 }

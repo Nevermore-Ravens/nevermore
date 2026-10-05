@@ -16,6 +16,12 @@ class BaseField extends FlxSpriteGroup {
 		return clock;
 	}
 
+	public var keyCount(default, set):Int = 4;
+	function set_keyCount(v:Int):Int {
+		keyCount = v;
+		return v;
+	}
+
 	// works like FlxState.persistentUpdate
 	public var persistentUpdate:Bool = false;
 
@@ -109,6 +115,8 @@ class BaseField extends FlxSpriteGroup {
 		if (chart.scrollVelocities.length <= 1) {
 			modifiers.scrollVelocities = false;
 		}
+
+		keyCount = chart.keyCount;
 		
 		scrollVelocities = modifiers.scrollVelocities;
 		if (scrollVelocities) velocityClock.map.reset(chart.scrollVelocities);
@@ -131,7 +139,9 @@ class BaseField extends FlxSpriteGroup {
 	}
 
 	function applyModifiers(chart:Chart, modifiers:GameplayModifiers) {
-		var lanes:Array<Int> = modifiers.mirroredNotes ? [3, 2, 1, 0] : [0, 1, 2, 3];
+		var keySeq = [for (i in 0...keyCount) i];
+		if (modifiers.mirroredNotes) keySeq.reverse();
+		var lanes:Array<Int> = keySeq;
 		if (modifiers.randomizedNotes) FlxG.random.shuffle(lanes);
 
 		for (note in chart.notes) {

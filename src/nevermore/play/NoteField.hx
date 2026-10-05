@@ -55,6 +55,13 @@ class NoteField extends BaseField {
 
 	public var assistTicks:Bool = false;
 	public var tickSound:FlxSound;
+	override function set_keyCount(v:Int):Int {
+		keyCount = v;
+		for (i in strumlines.members)
+			i.keyCount = v;
+		held = [for (i in 0...keyCount) false];
+		return v;
+	}
 
 	public function new(?lines:Array<Strumline>, ?playerID:Int = 0) {
 		sustains = new FlxTypedSpriteGroup<Sustain>();
@@ -76,6 +83,7 @@ class NoteField extends BaseField {
 
 		add(sustains);
 		add(strumlines);
+
 		add(notes);
 
 		tickSound = FlxG.sound.load(Assets.dependency.audio('sfx/hitsound.wav'));
@@ -187,7 +195,7 @@ class NoteField extends BaseField {
 		}
 	}
 
-	var held:Array<Bool> = [for (i in 0...Nevermore.keyCount) false];
+	var held:Array<Bool> = [];
 	var mirrorInputs:Array<Int> = [];
 	override function pressed(direction:Int) {
 		if (autoplay || (!persistentUpdate && Nevermore.paused)) return;

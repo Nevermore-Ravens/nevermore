@@ -35,6 +35,11 @@ class Sustain extends Note {
 		behavior.setup(this);
 		behavior.applySkin(this, SUSTAIN);
 
+		scale.scale(1 / (strumline.keyCount / 4));
+		width *= (1 / (strumline.keyCount / 4));
+		height *= (1 / (strumline.keyCount / 4));
+		centerOffsets();
+
 		lastScaleY = -1;
 		lastSustainScale = -1;
 

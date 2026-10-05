@@ -5,12 +5,13 @@ import nevermore.skins.Noteskin;
 import nevermore.play.note.Sustain;
 
 class Strumline extends FlxTypedSpriteGroup<Receptor> {
-	public var keyCount(default, set):Int = Nevermore.keyCount;
 	public var field:NoteField;
+	public var keyCount(default, set):Int = 4;
 	function set_keyCount(v:Int):Int {
 		keyCount = v;
 		if (!ai) InputManager.currentKeyCount = v;
 		regen();
+		size = size;
 		return v;
 	}
 
