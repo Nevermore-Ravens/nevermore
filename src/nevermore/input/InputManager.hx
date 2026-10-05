@@ -13,6 +13,7 @@ class InputManager {
 	public var onPress:Event<Int -> Void>;
 	public var onRelease:Event<Int -> Void>;
 	public var timestamp:Int = 0;
+	public static var currentKeyCount:Int = 4;
 
 	public function new() {
 		onPress = new Event<Int -> Void>();
@@ -50,7 +51,7 @@ class InputManager {
 	}
 
 	inline function keyPressed(key:KeyCode, _) {
-		var direction:Int = Controls.keyboard.get(key);
+		var direction:Int = Controls.keyboard.get(currentKeyCount, key);
 		if (direction == -1) return;
 
 		#if (lime >= version("8.4.0"))
@@ -63,14 +64,14 @@ class InputManager {
 	}
 
 	inline function keyReleased(key:KeyCode, _) {
-		var direction:Int = Controls.keyboard.get(key);
+		var direction:Int = Controls.keyboard.get(currentKeyCount, key);
 		if (direction == -1) return;
 
 		onRelease.dispatch(direction);
 	}
 
 	inline function buttonPressed(button:GamepadButton) {
-		var direction:Int = Controls.gamepad.get(button);
+		var direction:Int = Controls.gamepad.get(currentKeyCount, button);
 		if (direction == -1) return;
 
 		#if (lime >= version("8.4.0"))
@@ -84,7 +85,7 @@ class InputManager {
 	}
 
 	inline function buttonReleased(button:GamepadButton) {
-		var direction:Int = Controls.gamepad.get(button);
+		var direction:Int = Controls.gamepad.get(currentKeyCount, button);
 		if (direction == -1) return;
 
 		onRelease.dispatch(direction);

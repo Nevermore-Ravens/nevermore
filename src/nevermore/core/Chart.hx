@@ -47,7 +47,7 @@ class Chart {
 	// length == 3 / hands
 	// length == 4 / quads 
 	function getChordCount(?playerID:Int = 0, ?length:Int = 2):Int {
-		length = Math.max(length, 2);
+		length = Std.int(Math.max(length, 2)); // Stops the compiler from whining
 
 		var count:Int = 0;
 		var chordLength:Int = 1; // at least 1 note per now
