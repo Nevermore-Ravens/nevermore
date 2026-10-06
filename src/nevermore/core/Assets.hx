@@ -26,7 +26,7 @@ class AssetHandler {
 	];
 
 	public function image(key:String):FlxGraphic {
-		if (key.lastIndexOf('.') < 0) key += '.${imageFormats[0]}';
+		if (key.lastIndexOf('.') == -1) key += '.${imageFormats[0]}';
 		var path = getPath(key);
 		if (Assets.cache.exists(path)) {
 			return switch Assets.cache.get(path).src {
@@ -45,7 +45,7 @@ class AssetHandler {
 	}
 
 	public function audio(key:String):Sound {
-		if (key.lastIndexOf('.') < 0) key += '.${audioFormats[0]}';
+		if (key.lastIndexOf('.') == -1) key += '.${audioFormats[0]}';
 		var path = getPath(key);
 		if (Assets.cache.exists(path)) {
 			return switch Assets.cache.get(path).src {

@@ -104,7 +104,10 @@ class Conductor extends flixel.FlxBasic {
 	// raw sound.time
 	@:isVar public static var audioTime(get, set):Float;
 	static function get_audioTime():Float return clock.audioTime;
-	static function set_audioTime(v:Float):Float return inst.time = v;
+	static function set_audioTime(v:Float):Float {
+		if (!_playing) return clock.audioTime = v;
+		return inst.time = v;
+	}
 
 	// sound.time + offset
 	public static var songTime(get, never):Float;
@@ -133,6 +136,7 @@ class Conductor extends flixel.FlxBasic {
 		if (vocals != null) vocals.play();
 
 		clock.active = true;
+		_playing = true;
 	}
 
 	public static function stop() {
@@ -140,6 +144,7 @@ class Conductor extends flixel.FlxBasic {
 		if (vocals != null) vocals.stop();
 
 		clock.active = false;
+		_playing = false;
 	}
 
 	public static function pause() {
@@ -155,6 +160,9 @@ class Conductor extends flixel.FlxBasic {
 
 		clock.active = true;
 	}
+
+	// internal variable to tell if the song started playing or not
+	static var _playing:Bool = false;
 
 	public function new() {
 		super();
