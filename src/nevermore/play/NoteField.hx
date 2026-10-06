@@ -280,6 +280,16 @@ class NoteField extends BaseField {
 		return noteToHit;
 	}
 
+	// attempts to recreate the "regrab" system from stepmania/etterna
+	// instead of immediately dropping the sustain when the player lets go,
+	// we give them a little bit of leeway by holding onto the sustain for a *little* longer,
+	// and then finally letting the sustain go
+	//
+	// this allows for relatively great-feeling sustain gameplay
+	// without it being too hand-holdy (if the length of time is short enough),
+	// especially if there's a note right after the end of a sustain
+	//
+	// this same concept applies to rolls as well, since they heavily utilize this functionality
 	var sustainInterval:Float = 0.12;
 	function holdInputs(sustain:Sustain) {
 		if (!sustain.wasHit) return;
