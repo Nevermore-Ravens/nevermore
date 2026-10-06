@@ -57,7 +57,7 @@ class Sustain extends Note {
 	public var visualEnd:Float;
 	override function setup(strumline:Strumline, data:NoteData):Note {
 		wasHit = false;
-		regrabTimer = HitWindows.max / 1000;
+		regrabTimer = Judgement.max.window / 1000;
 		regrabAlpha = 0.7;
 		untilTick = 0;
 

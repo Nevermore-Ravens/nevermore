@@ -301,7 +301,7 @@ class NoteField extends BaseField {
 		var playerHeld:Bool = (held || sustain.regrabTimer > 0);
 		var heldKey:Bool = (!strumline.ai && playerHeld) || (strumline.ai && sustain.adjustedTime <= clock.time);
 
-		final regrabLimit:Float = HitWindows.max / 1000;
+		final regrabLimit:Float = Judgement.max.window / 1000;
 
 		if (sustain.regrabTimer < regrabLimit && held && !strumline.ai) { // regrab logic would never happen in botplay
 			receptor.glow('standard');

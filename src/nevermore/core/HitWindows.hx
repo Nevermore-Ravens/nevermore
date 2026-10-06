@@ -75,7 +75,7 @@ class HitWindows {
 
 		"Friday Night Funkin' (Legacy)" => [33.34, 125, 150, 166.67],
 		"Friday Night Funkin' (Week 7)" => [33.34, 91.69, 133.34, 166.67],
-		"Friday Night Funkin'" => [/* 12.5, */45, 90, 135, 160],
+		"Friday Night Funkin'" => [/* 12.5, */45, 90, 135, 160], // StepMania J4 but bads are 160 instead of 180
 
 		// these i got from project outfox
 		// as i really don't have a concrete way of getting these (tmk)
@@ -93,24 +93,6 @@ class HitWindows {
 		list.set(name, windows);
 	}
 
-	public static function getID(deviation:Float):Int {
-		for (i in 0 ... current.length) {
-			if (Math.abs(deviation) > current[i]) continue;
-			return i;
-		}
-
-		return current.length - 1;
-	}
-
-	public static function get(deviation:Float):Float {
-		for (window in current) {
-			if (Math.abs(deviation) > window) continue;
-			return window;
-		}
-
-		return max;
-	}
-
 	public static var current:Array<Float>;
 	public static var type(default, set):HitWindowType;
 	static function set_type(v:HitWindowType):HitWindowType {
@@ -118,7 +100,7 @@ class HitWindows {
 		return type = v;
 	}
 
-	public static function reset() {
+	public static function init() {
 		type = STEPMANIA_J4;
 	}
 }

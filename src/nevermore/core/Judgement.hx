@@ -4,15 +4,7 @@ package nevermore.core;
 // so you don't have to write it yourself
 @:structInit
 class Judgement {
-	public static var list:Map<String, Array<Judgement>> = [
-		'StepMania' => [
-			{name: 'Fantastic'},
-			{name: 'Perfect'},
-			{name: 'Great'},
-			{name: 'Good'},
-			{name: 'Bad'}
-		]
-	];
+	public static var list:Map<String, Array<Judgement>> = [];
 	public static var current:Array<Judgement>;
 
 	public static function register(name:String, judges:Array<Judgement>) {
@@ -20,9 +12,7 @@ class Judgement {
 	}
 
 	public static function resetHits() {
-		for (judges in list) {
-			for (judge in judges) judge.hits = 0;
-		}
+		for (judge in current) judge.hits = 0;
 	}
 
 	public static var min(get, never):Judgement;
@@ -39,13 +29,47 @@ class Judgement {
 		return type = v;
 	}
 
-	public static function reset() {
-		type = 'StepMania';
+	public static function init() {
+		HitWindows.init();
+
+		register('Default', [
+			{
+				name: 'Fantastic',
+				window: HitWindows.current[0]
+			},
+			{
+				name: 'Perfect',
+				window: HitWindows.current[1]
+			},
+			{
+				name: 'Great',
+				window: HitWindows.current[2]
+			},
+			{
+				name: 'Good',
+				window: HitWindows.current[3]
+			},
+			{
+				name: 'Bad',
+				breaksCombo: true,
+				window: HitWindows.current[4]
+			}
+		]);
+		type = 'Default';
+	}
+
+	public static function getID(deviation:Float):Int {
+		for (i => judge in current) {
+			if (Math.abs(deviation) > judge.window) continue;
+			return i;
+		}
+
+		return current.length - 1;
 	}
 
 	public static function get(deviation:Float):Judgement {
-		for (i => judge in current) {
-			if (Math.abs(deviation) > HitWindows.current[i]) continue;
+		for (judge in current) {
+			if (Math.abs(deviation) > judge.window) continue;
 			return judge;
 		}
 
@@ -53,6 +77,7 @@ class Judgement {
 	}
 
 	public var name:String = 'Unknown';
-	public var causesMisses:Bool = false;
+	public var breaksCombo:Bool = false;
+	public var window:Float = 0.0;
 	public var hits:Int = 0;
 }
