@@ -66,7 +66,7 @@ class Note extends BaseNote {
 
 	override function move(clock:BaseClock):Void {
 		alpha = receptor.alpha * multAlpha;
-		visible = receptor.visible;
+		visible = strumline.visible; //receptor.visible;   dude what the fuck
 
 		var adjustedTime:Float = clock.usesScrollVelocities ? visualTime : adjustedTime;
 

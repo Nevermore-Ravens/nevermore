@@ -73,7 +73,7 @@ class Sustain extends Note {
 	public var timeOffset:Float;
 	override function move(clock:BaseClock) {
 		alpha = receptor.alpha;
-		visible = receptor.visible;
+		visible = strumline.visible; //receptor.visible;   dude what the fuck
 
 		var adjustedTime:Float = clock.usesScrollVelocities ? visualTime : adjustedTime;
 
