@@ -1,13 +1,25 @@
 package nevermore.core;
 
-// TODO:
-// maybe make a small fnf parser just so people don't 
-// either have to write a parser themselves
-// or setup a moonchart implementation
-// just to test this out ?
+#if moonchart
+import moonchart.backend.FormatData;
+import moonchart.formats.BasicFormat;
+import moonchart.formats.*;
+
+// IM A DUMBASS !!!!!!!! I FORGOT HOW TO USE MOONCHART
 //
-// or maybe just embed moonchart support into here ????
-// IDK
+// FUCK
+class BaseParser {
+	public function new() {}
+
+	public function load(path:String, ?diff:String):Chart {
+		var result:Chart = Song.dummyData();
+
+		return result;
+	}
+}
+
+#else
+
 class BaseParser {
 	public function new() {}
 
@@ -17,3 +29,4 @@ class BaseParser {
 
 	public function exists(path:String, ?diff:String):Bool return false;
 }
+#end
