@@ -16,6 +16,8 @@ class BaseParser {
 
 		return result;
 	}
+
+	public function exists(path:String, ?diff:String):Bool return false;
 }
 
 #else
