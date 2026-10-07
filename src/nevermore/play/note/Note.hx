@@ -41,6 +41,8 @@ class Note extends BaseNote {
 		this.field = strumline.field;
 
 		angle = 0;
+		visible = true;
+		alpha = 1;
 
 		sustain = null;
 		passedStrumline = false;

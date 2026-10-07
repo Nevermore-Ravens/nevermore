@@ -127,7 +127,7 @@ class Sustain extends Note {
 	var tailAnim:FlxAnimation;
 	var tailHeight:Float = 0;
 	override function draw() {
-		if (height == 0 || alpha == 0 || regrabAlpha <= 0)
+		if (height == 0 || !visible || alpha == 0 || regrabAlpha <= 0)
 			return;
 
 		updateFrames(clock.time);
