@@ -58,7 +58,6 @@ class Judgement {
 		type = 'Default';
 	}
 
-	// test
 	public static function getID(deviation:Float):Int {
 		for (i => judge in current) {
 			if (Math.abs(deviation) > judge.window) continue;
