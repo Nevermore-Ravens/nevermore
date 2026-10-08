@@ -390,6 +390,11 @@ class NoteField extends BaseField {
 			modchart.killAllQueues();
 			modchart.prepare();
 
+			// disabled because trying to deal with underlays
+			// while notes are going fucking everywhere across the screen
+			// is just not worth it
+			//underlays.draw();
+
 			for (i => strumline in strumlines.members) {
 				if (!strumline.visible) continue;
 

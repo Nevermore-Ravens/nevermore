@@ -12,7 +12,7 @@ class UnderlayGroup extends FlxTypedSpriteGroup<LaneUnderlay> {
 		for (underlay in members) {
 			var strumline:Strumline = underlay.strumline;
 
-			underlay.x = strumline.x - 20;
+			underlay.x = strumline.x - (underlay.width / 2);
 			underlay.visible = this.visible && strumline.visible;
 			underlay.alpha = strumline.alpha * this.alpha;
 		}
