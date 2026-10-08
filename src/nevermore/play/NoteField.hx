@@ -58,6 +58,7 @@ class NoteField extends BaseField {
 	public var tickSound:FlxSound;
 	override function set_keyCount(v:Int):Int {
 		keyCount = v;
+		input.keyCount = v;
 		for (i in strumlines.members)
 			i.keyCount = v;
 		held = [for (i in 0...keyCount) false];

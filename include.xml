@@ -13,9 +13,9 @@
 	since this is called when the lib is defined
 	i suggest setting up nevermore defines 
 	BEFORE `<haxelib name="nevermore"/>` is called -rudy
-	(TODO: look more on genericBuild, it may help with my issue which this fixes) -srt
 	-->
 	<section unless="NEVERMORE_NO_MODCHARTS">
+		<!-- (TODO: look more on genericBuild, it may help with my issue which this fixes) -srt -->
 		<haxeflag name="--macro" value="haxe.macro.Compiler.include('nevermore.modchart.mods')"/>
 	</section>
 	<haxeflag name="--macro" value="haxe.macro.Compiler.addMetadata('@:build(nevermore.macros.NoteItemMacro.attachNoteType())', 'flixel.graphics.tile.FlxDrawItemType')"/>

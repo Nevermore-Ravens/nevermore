@@ -13,7 +13,7 @@ class InputManager {
 	public var onPress:Event<Int -> Void>;
 	public var onRelease:Event<Int -> Void>;
 	public var timestamp:Int = 0;
-	public static var keyCount:Int = 4;
+	public var keyCount:Int = 4;
 
 	public function new() {
 		onPress = new Event<Int -> Void>();

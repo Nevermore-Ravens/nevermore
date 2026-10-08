@@ -9,15 +9,13 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 	public var keyCount(default, set):Int = 4;
 	function set_keyCount(v:Int):Int {
 		keyCount = v;
-		if (!ai) InputManager.keyCount = v;
 		regen();
-		size = size;
 		return v;
 	}
 
 	public var size(default, set):Float = 1;
 	function set_size(v:Float):Float {
-		var scaleMult:Float = (v / size) * (4 / keyCount);
+		var scaleMult:Float = (v / size) * keyScale;
 		for (receptor in members) {
 			receptor.x = (receptor.x - x) * scaleMult + x;
 			receptor.scale.scale(scaleMult);
@@ -37,6 +35,11 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 		return v;
 	}
 
+	public var keyScale(get, never):Float;
+	function get_keyScale():Float {
+		return 4 / keyCount;
+	}
+
 	public var curHolds:Array<Sustain> = [];
 
 	// for similar properties between Strumline and ProxyField. as said, only for modcharts.
@@ -51,7 +54,7 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 
 	public var constantSize(get, never):Float;
 	function get_constantSize():Float {
-		return skin.spacing * size;
+		return skin.spacing * size * keyScale;
 	}
 
 	// not static in case someone wants to override it
@@ -77,14 +80,13 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 		var receptor:Receptor = null;
 		for (i in 0...keyCount) {
 			add(receptor = new Receptor(this, i));
-			if (skin != null) skin.apply(receptor, !skin.supportsXKeys ? i % 4: i, "receptor");
-			receptor.scale.scale(size);
-			receptor.updateHitbox();
+			if (skin != null) skin.apply(receptor, i, "receptor");
 
-			receptor.x += constantSize * (i - keyCount * 0.5);
-			receptor.y += (constantSize - receptor.height) * 0.5;
+			receptor.x += skin.spacing * (i - keyCount * 0.5);
+			receptor.y += (skin.spacing - receptor.height) * 0.5;
 		}
 
 		receptor = null;
+		size = size;
 	}
 }
