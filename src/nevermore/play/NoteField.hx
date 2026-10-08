@@ -5,6 +5,7 @@ import flixel.FlxCamera;
 import nevermore.play.note.*;
 
 class NoteField extends BaseField {
+	public var underlays:FlxTypedSpriteGroup<FlxSprite>;
 	public var sustains:FlxTypedSpriteGroup<Sustain>;
 	public var strumlines:FlxTypedSpriteGroup<Strumline>;
 	public var notes:FlxTypedSpriteGroup<Note>;
@@ -64,6 +65,8 @@ class NoteField extends BaseField {
 	}
 
 	public function new(?lines:Array<Strumline>, ?playerID:Int = 0) {
+		underlays = new FlxTypedSpriteGroup<FlxSprite>();
+
 		sustains = new FlxTypedSpriteGroup<Sustain>();
 		sustains.active = false;
 
@@ -75,11 +78,19 @@ class NoteField extends BaseField {
 		for (line in lines ?? []) {
 			line.field = this;
 			strumlines.add(line);
+
+			var underlayX:Float = line.x - (line.width / 2) - 20;
+			var underlay = new FlxSprite(underlayX).makeGraphic(1, 1, FlxColor.BLACK);
+			underlay.scale.set(line.width + 40, FlxG.height);
+			underlay.updateHitbox();
+			underlays.add(underlay);
 		}
 
 		super();
 
 		this.playerID = playerID;
+
+		add(underlays);
 
 		add(sustains);
 		add(strumlines);
@@ -93,17 +104,21 @@ class NoteField extends BaseField {
 	override function update(delta:Float) {
 		super.update(delta);
 
-		var checkForUpdates = false;
+		for (i => underlay in underlays.members) {
+			underlay.alpha = strumlines.members[i].alpha * underlays.alpha;
+			underlay.visible = strumlines.members[i].visible;
+		}
+
+		var updateBehaviors = false;
 		for (i in 0 ... notes.length) {
 			var note:Note = notes.members[i];
 
 			if (!note.passedStrumline) checkAssistTick(note);
 			if (!note.exists) continue;
 
-			if (note.behavior != NoteBehavior.base && !checkForUpdates) {
-				checkForUpdates = true; // This makes sure that we don't do mapchecks every frame by seeing if notetypes exist.
+			if (note.behavior != NoteBehavior.base && !updateBehaviors) {
+				updateBehaviors = true; // This makes sure that we don't do mapchecks every frame by seeing if notetypes exist.
 			}
-
 
 			if (note.active) note.update(delta);
 			note.move(scrollVelocities ? velocityClock : clock);
@@ -133,7 +148,7 @@ class NoteField extends BaseField {
 			}
 		}
 
-		if (checkForUpdates) {
+		if (updateBehaviors) {
 			for (i in NoteBehavior.getListOfBehaviours()) {
 				var notesToCheck:Array<Note> = [for (n in notes.members) {if (n.behavior == i) n;}];
 				i.update(delta, notesToCheck);
