@@ -76,6 +76,7 @@ class Strumline extends FlxTypedSpriteGroup<Receptor> {
 
 	function regen() {
 		clear();
+		size = 1;
 
 		var receptor:Receptor = null;
 		for (i in 0...keyCount) {
