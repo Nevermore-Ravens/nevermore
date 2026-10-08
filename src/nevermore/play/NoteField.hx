@@ -66,6 +66,7 @@ class NoteField extends BaseField {
 
 	public function new(?lines:Array<Strumline>, ?playerID:Int = 0) {
 		underlays = new FlxTypedSpriteGroup<FlxSprite>();
+		underlays.alpha = 0; // this should probably be off by default ???
 
 		sustains = new FlxTypedSpriteGroup<Sustain>();
 		sustains.active = false;
