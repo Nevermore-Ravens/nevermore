@@ -5,7 +5,7 @@ import flixel.FlxCamera;
 import nevermore.play.note.*;
 
 class NoteField extends BaseField {
-	public var underlays:FlxTypedSpriteGroup<FlxSprite>;
+	public var underlays:UnderlayGroup;
 	public var sustains:FlxTypedSpriteGroup<Sustain>;
 	public var strumlines:FlxTypedSpriteGroup<Strumline>;
 	public var notes:FlxTypedSpriteGroup<Note>;
@@ -65,7 +65,8 @@ class NoteField extends BaseField {
 	}
 
 	public function new(?lines:Array<Strumline>, ?playerID:Int = 0) {
-		underlays = new FlxTypedSpriteGroup<FlxSprite>();
+		underlays = new UnderlayGroup(lines);
+		underlays.color = FlxColor.BLACK;
 		underlays.alpha = 0; // this should probably be off by default ???
 
 		sustains = new FlxTypedSpriteGroup<Sustain>();
@@ -79,12 +80,6 @@ class NoteField extends BaseField {
 		for (line in lines ?? []) {
 			line.field = this;
 			strumlines.add(line);
-
-			var underlayX:Float = line.x - (line.width / 2) - 20;
-			var underlay = new FlxSprite(underlayX).makeGraphic(1, 1, FlxColor.BLACK);
-			underlay.scale.set(line.width + 40, FlxG.height);
-			underlay.updateHitbox();
-			underlays.add(underlay);
 		}
 
 		super();
