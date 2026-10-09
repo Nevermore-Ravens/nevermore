@@ -23,9 +23,9 @@ class MineBehavior extends NoteBehavior {
 	override function update(delta:Float, notes:Array<Note>) {
 		for (i in 0...notes.length) {
 			var note:Note = notes[i];
-			var clock:BaseClock = note.field.scrollVelocities ? note.field.velocityClock : note.field.clock;
-			var timeDist:Float = (clock.usesScrollVelocities ? note.visualTime : note.adjustedTime) - clock.time;
-			note.angle = timeDist * (Util.crotchet(note.field.clock.timingMap.tempo) * 0.001);
+
+			var timeDist:Float = note.visualTime - note.clock.time;
+			note.angle = timeDist * (Util.crotchet(note.clock.timingMap.tempo) * 0.001);
 		}
 	}
 

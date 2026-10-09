@@ -2,8 +2,8 @@ package nevermore.core.timing;
 
 class SyncClock extends BaseClock {
 	var _lastTime:Float = 0.0;
-	override function reset(?timingPoints:Array<TimingPoint>):Void {
-		super.reset(timingPoints);
+	override function reset(?chart:Chart):Void {
+		super.reset(chart);
 		_lastTime = 0.0;
 	}
 
@@ -34,6 +34,7 @@ class SyncClock extends BaseClock {
 			_lastTime = audioTime;
 		}
 
+		updateVelocities(time);
 		updateBeats(time);
 	}
 }

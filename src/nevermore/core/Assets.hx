@@ -119,12 +119,14 @@ class AssetHandler {
 		return sys.FileSystem.exists(getPath(key));
 	}
 
+	// for faster access i suggest writing your paths like `assets/file.ext`
+	// unless you're grabbing a file that can be multiple extensions (like a song or something)
 	public dynamic function getPath(key:String, ?extensions:Array<String>):String {
 		var path = new Path('$root/$key');
 
 		// assume there's already a file extension applied
 		if (path.ext.length != 0) return path.toString();
-		
+
 		extensions ??= [];
 		for (ext in extensions) {
 			path.ext = ext;

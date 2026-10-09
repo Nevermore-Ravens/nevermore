@@ -54,6 +54,7 @@ class Sustain extends Note {
 	public var regrabTimer:Float;
 	public var regrabAlpha:Float;
 	public var untilTick:Float;
+
 	public var visualEnd:Float;
 	override function setup(strumline:Strumline, data:NoteData):Note {
 		wasHit = false;
@@ -75,9 +76,7 @@ class Sustain extends Note {
 		alpha = receptor.alpha;
 		visible = strumline.visible; //receptor.visible;   dude what the fuck
 
-		var adjustedTime:Float = clock.usesScrollVelocities ? visualTime : adjustedTime;
-
-		var deviation:Float = ((adjustedTime - clock.time) + timeOffset) + Nevermore.settings.visualOffset;
+		var deviation:Float = ((visualTime - clock.visualTime) + timeOffset) + Nevermore.settings.visualOffset;
 		var adjustedSpeed:Float = (strumline.speed * strumline.pixelsPerMS);
 
 		distance = deviation * (adjustedSpeed / clock.rate);
@@ -102,7 +101,7 @@ class Sustain extends Note {
 			lastScaleY = scale.y;
 			lastSustainScale = holdScale;
 
-			var length:Float = visualTime > 0 ? (visualEnd - visualTime) : length;
+			var length:Float = visualEnd > 0 ? (visualEnd - data.visualTime) : length;
 			height = (length - timeOffset) * (holdScale * strumline.pixelsPerMS);
 		}
 	}

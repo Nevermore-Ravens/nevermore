@@ -32,7 +32,6 @@ class Song {
 
 		result.notes = cleanedNotes.filter(function(note:NoteData) return note != null);
 		result.sortTimingPoints();
-		result.sortScrollVelocities();
 		return result;
 	}
 

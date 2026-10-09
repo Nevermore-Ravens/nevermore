@@ -34,16 +34,19 @@ class BaseClock {
 	public var audioTime:Float;
 	public var songTime:Float;
 	public var time:Float;
+	public var visualTime:Float;
+
 	public var timingMap:TimingMap;
-	
-	public var usesScrollVelocities:Bool = false;
+	public var velocityMap:VelocityMap;
 
 	public var active:Bool = true;
 	
 	public var audio:FlxSound;
 	public function new(?audio:FlxSound) {
 		this.audio = audio;
+
 		timingMap = new TimingMap();
+		velocityMap = new VelocityMap();
 
 		stepHit = new FlxTypedSignal<Int -> Void>();
 		beatHit = new FlxTypedSignal<Int -> Void>();
@@ -54,7 +57,11 @@ class BaseClock {
 	}
 
 	public function destroy() {
+		timingMap.destroy();
 		timingMap = null;
+
+		velocityMap.destroy();
+		velocityMap = null;
 
 		stepHit.destroy();
 		stepHit = null;
@@ -75,11 +82,13 @@ class BaseClock {
 		return rate = 1.0;
 	}
 	#end
-	public function reset(?timingPoints:Array<TimingPoint>) {
-		audioTime = songTime = time = 0.0;
+	public function reset(?chart:Chart) {
+		audioTime = songTime = time = visualTime = 0.0;
 		rate = 1.0;
 
-		timingMap.reset(timingPoints ?? []);
+		chart ??= Song.dummyData();
+		timingMap.reset(chart.timingPoints);
+		velocityMap.reset(chart.scrollVelocities);
 	}
 
 	public var stepHit:FlxTypedSignal<Int -> Void>;
@@ -96,7 +105,29 @@ class BaseClock {
 		songTime = audioTime + offset;
 		time = songTime;
 
+		updateVelocities(time);
 		updateBeats(songTime);
+	}
+
+	var velocityIndex:Int = 0;
+	var currentVelocity:ScrollVelocity = {};
+	function updateVelocities(pos:Float) {
+		var offsetedTime:Float = pos - Nevermore.settings.inputOffset;
+
+		if (velocityMap.length == 0) {
+			visualTime = offsetedTime;
+			return;
+		}
+
+		for (i in (velocityIndex + 1) ... velocityMap.length) {
+			var next:ScrollVelocity = velocityMap.list[i];
+			if (next.time > offsetedTime) break;
+
+			velocityIndex = i;
+			currentVelocity = next;
+		}
+
+		visualTime = currentVelocity.toPixels(offsetedTime);
 	}
 
 	public var metronome:Bool = false;

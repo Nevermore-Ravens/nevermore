@@ -118,7 +118,7 @@ class NoteField extends BaseField {
 			}
 
 			if (note.active) note.update(delta);
-			note.move(scrollVelocities ? velocityClock : clock);
+			note.move(clock);
 
 			// should probably move this to a separate function later
 			if (note.strumline.ai) {
@@ -159,7 +159,7 @@ class NoteField extends BaseField {
 			if (sustain.active) sustain.update(delta);
 
 			holdInputs(sustain);
-			sustain.move(scrollVelocities ? velocityClock : clock);
+			sustain.move(clock);
 			sustain.calcHeight(sustain.strumline.speed / clock.rate);
 
 			if (sustain.adjustedTime + sustain.length < clock.time - killDelay) {
@@ -341,7 +341,7 @@ class NoteField extends BaseField {
 		if (!scrollVelocities)
 			sustain.timeOffset = -Math.min(sustain.adjustedTime - clock.time, 0);
 		else if (clock.time >= sustain.adjustedTime)
-			sustain.timeOffset = velocityClock.time - sustain.visualTime;
+			sustain.timeOffset = clock.visualTime - sustain.visualTime;
 		
 		sustain.forceHeightRecalc = true;
 		receptor.isHolding = true;

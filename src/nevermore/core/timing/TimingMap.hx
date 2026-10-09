@@ -11,6 +11,11 @@ class TimingMap {
 
 	public function new() {}
 
+	public function destroy() {
+		list.resize(0);
+		list = null;
+	}
+
 	public function reset(points:Array<TimingPoint>):TimingMap {
 		if (points.length == 0) points.push({});
 		points.sort((a, b) -> return Std.int(a.time - b.time));

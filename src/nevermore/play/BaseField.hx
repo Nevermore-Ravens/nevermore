@@ -2,7 +2,6 @@ package nevermore.play;
 
 import flixel.group.FlxSpriteGroup;
 import nevermore.core.timing.BaseClock;
-import nevermore.core.timing.VelocityClock;
 import nevermore.core.timing.TimingMap;
 import nevermore.modchart.ModchartManager;
 import nevermore.core.Chart;
@@ -54,7 +53,6 @@ class BaseField extends FlxSpriteGroup {
 	public var scrollVelocities:Bool = true;
 
 	public var spawner:NoteSpawner;
-	public var velocityClock:VelocityClock;
 	public var modchart:ModchartManager;
 
 	public var input:InputManager;
@@ -71,7 +69,6 @@ class BaseField extends FlxSpriteGroup {
 
 		input = new InputManager();
 		spawner = new NoteSpawner();
-		velocityClock = new VelocityClock();
 
 		input.onPress.add(pressed);
 		input.onRelease.add(released);
@@ -93,7 +90,6 @@ class BaseField extends FlxSpriteGroup {
 			obj.update(delta);
 		}
 
-		if (scrollVelocities) velocityClock.updateSVs(clock);
 		if (modchart != null) modchart.update();
 
 		spawner.update(clock);
@@ -104,11 +100,9 @@ class BaseField extends FlxSpriteGroup {
 
 		input.destroy();
 		spawner.destroy();
-		velocityClock.destroy();
 
 		spawner = null;
 		input = null;
-		velocityClock = null;
 	}
 
 	public function load(chart:Chart, ?modifiers:GameplayModifiers) {
@@ -120,14 +114,13 @@ class BaseField extends FlxSpriteGroup {
 		keyCount = chart.keyCount;
 		
 		scrollVelocities = modifiers.scrollVelocities;
-		if (scrollVelocities) velocityClock.map.reset(chart.scrollVelocities);
 
-		var map:TimingMap = clock.timingMap;
-		clock.reset(chart.timingPoints);
+		clock.reset(chart);
 		clock.offset = chart.offset;
 
 		applyModifiers(chart, modifiers);
 
+		var map:TimingMap = clock.timingMap;
 		var list:Array<NoteData> = [];
 		for (i => note in chart.notes) {
 			note.beat = map.getBeat(note.time);
@@ -150,10 +143,10 @@ class BaseField extends FlxSpriteGroup {
 			if (!modifiers.sustains) note.length = 0;
 			if (!modifiers.scrollVelocities) continue;
 
-			note.visualTime = velocityClock.map.getPosition(note.time);
+			note.visualTime = clock.velocityMap.getPosition(note.time);
 			if (note.length > 0) {
 				var endTime = note.time + note.length;
-				note.visualEnd = velocityClock.map.getPosition(endTime);
+				note.visualEnd = clock.velocityMap.getPosition(endTime);
 			}
 		}
 	}

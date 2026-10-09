@@ -1,10 +1,10 @@
 package nevermore.core.timing;
 
-class ScrollVelocityMap {
+class VelocityMap {
 	public var list:Array<ScrollVelocity>;
 	public var length:Int = 0;
 
-	public function new(list:Array<ScrollVelocity>) {
+	public function new(?list:Array<ScrollVelocity>) {
 		reset(list);
 	}
 
@@ -40,7 +40,7 @@ class ScrollVelocityMap {
 	}
 
 	public function getPosition(time:Float):Float {
-		if (length == 0) return time;
+		if (length == 0) return -1;
 		return get(time).toPixels(time);
 	}
 }

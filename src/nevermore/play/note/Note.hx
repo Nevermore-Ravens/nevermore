@@ -48,7 +48,6 @@ class Note extends BaseNote {
 		passedStrumline = false;
 		multAlpha = 1;
 		
-		visualTime = data.visualTime;
 		time = data.time;
 		lane = data.lane;
 		player = data.player;
@@ -70,9 +69,7 @@ class Note extends BaseNote {
 		alpha = receptor.alpha * multAlpha;
 		visible = strumline.visible; //receptor.visible;   dude what the fuck
 
-		var adjustedTime:Float = clock.usesScrollVelocities ? visualTime : adjustedTime;
-
-		var deviation:Float = (adjustedTime - clock.time) + Nevermore.settings.visualOffset;
+		var deviation:Float = (visualTime - clock.visualTime) + Nevermore.settings.visualOffset;
 		var adjustedSpeed:Float = (strumline.speed * strumline.pixelsPerMS);
 
 		distance = deviation * (adjustedSpeed / clock.rate);
