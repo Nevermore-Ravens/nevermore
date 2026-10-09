@@ -6,6 +6,7 @@ import openfl.system.System;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
 import lime.media.AudioBuffer;
+import haxe.io.Path;
 
 class AssetHandler {
 	public var root:String = '';
@@ -26,8 +27,8 @@ class AssetHandler {
 	];
 
 	public function image(key:String):FlxGraphic {
-		if (key.lastIndexOf('.') == -1) key += '.${imageFormats[0]}';
-		var path = getPath(key);
+		var path:String = getPath(key, imageFormats);
+
 		if (Assets.cache.exists(path)) {
 			return switch Assets.cache.get(path).src {
 				case Graphic(graphic): graphic;
@@ -45,8 +46,8 @@ class AssetHandler {
 	}
 
 	public function audio(key:String):Sound {
-		if (key.lastIndexOf('.') == -1) key += '.${audioFormats[0]}';
-		var path = getPath(key);
+		var path:String = getPath(key, audioFormats);
+
 		if (Assets.cache.exists(path)) {
 			return switch Assets.cache.get(path).src {
 				case Audio(sound): sound;
@@ -67,8 +68,8 @@ class AssetHandler {
 	// somehow figure out how to make it work for pre-8.4.0?
 	public function streamedAudio(key:String):Sound {
 		#if (lime >= version("8.4.0"))
-		if (key.lastIndexOf('.') < 0) key += '.${audioFormats[0]}';
-		var path = getPath(key);
+		var path:String = getPath(key, audioFormats);
+
 		if (Assets.cache.exists(path)) {
 			return switch Assets.cache.get(path).src {
 				case Audio(sound): sound;
@@ -85,17 +86,17 @@ class AssetHandler {
 	}
 
 	public function text(key:String):String {
-		key = getPath(key);
-		if (!FileSystem.exists(key)) return '';
+		var key:String = getPath(key);
 
+		if (!FileSystem.exists(key)) return '';
 		return sys.io.File.getContent(key);
 	}
 
 	// no need to cache something like this
 	// apparently it's fast enough ????
 	public function sparrowAtlas(key:String):FlxAtlasFrames {
-		var graphic = image(key);
-		var xml = text(key + '.xml');
+		var graphic:FlxGraphic = image(key);
+		var xml:String = text(key + '.xml');
 		return FlxAtlasFrames.fromSparrow(graphic, xml);
 	}
 
@@ -118,12 +119,19 @@ class AssetHandler {
 		return sys.FileSystem.exists(getPath(key));
 	}
 
-	public function getExtension(key:String, list:Array<String>):String {
-		return '';
-	}
+	public dynamic function getPath(key:String, ?extensions:Array<String>):String {
+		var path = new Path('$root/$key');
 
-	public dynamic function getPath(key:String):String {
-		return '$root/$key';
+		// assume there's already a file extension applied
+		if (path.ext.length != 0) return path.toString();
+		
+		extensions ??= [];
+		for (ext in extensions) {
+			path.ext = ext;
+			if (FileSystem.exists(path.toString())) break;
+		}
+
+		return path.toString();
 	}
 }
 
