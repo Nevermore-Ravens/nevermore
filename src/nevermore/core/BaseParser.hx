@@ -2,8 +2,10 @@ package nevermore.core;
 
 #if moonchart
 import moonchart.backend.FormatData;
+import moonchart.backend.FormatDetector;
 import moonchart.formats.BasicFormat;
 import moonchart.formats.*;
+import haxe.io.Path;
 
 class BaseParser {
 	public function new() {}
@@ -26,18 +28,10 @@ class BaseParser {
 		var result:Chart = Song.dummyData();
 
 		var singleDiff:Bool = diff.length == 0;
-		var file:String = path;
 
-		// osu/quaver/fnf legacy
-		if (singleDiff) {
-			if (!FileSystem.exists(file)) return result;
-		} else {
-		// sm/ssc/(guitar/clone) hero
-			file = findInFolder(folder, diff);
-			if (file.length == 0) return result;
-		}
+		if (!FileSystem.exists(path)) return result;
 
-		var format = FormatDetector.instanceFromFiles([file]);
+		var format = FormatDetector.instanceFromFiles([path]);
 		var meta:BasicMetaData = format.getChartMeta();
 
 		result.title = meta.title;
@@ -50,13 +44,13 @@ class BaseParser {
 				{
 					time: change.time,
 					tempo: change.bpm,
-					beatsPerMeasure: change.beatsPerMeasure
+					beatsPerMeasure: Std.int(change.beatsPerMeasure)
 				}
 			}
 		];
 
 		result.notes = [
-			for (note in format.getNotes()) {
+			for (note in format.getNotes(diff)) {
 				{
 					time: note.time,
 					lane: note.lane,
@@ -73,27 +67,6 @@ class BaseParser {
 		result.snapRelativeToChanges = true;
 
 		return result;
-	}
-
-	static function findInFolder(folder:String, diff:String):String {
-		var directory:String = 'assets/' + folder;
-		if (!FileSystem.exists(directory)) return '';
-
-		var path = new Path(directory);
-		path.dir = directory;
-
-		for (file in FileSystem.readDirectory(directory)) {
-			path.file = Path.withoutExtension(file);
-			path.ext = Path.extension(file);
-
-			if (!extensions.contains(path.ext)) continue;
-			if (path.file != Util.format(diff)) continue;
-
-			// this is probably the file we're looking for
-			return path.toString();
-		}
-
-		return '';
 	}
 
 	public function exists(path:String, ?diff:String):Bool return false;
