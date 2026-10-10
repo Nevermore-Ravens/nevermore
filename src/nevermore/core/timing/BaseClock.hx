@@ -88,8 +88,6 @@ class BaseClock {
 
 		chart ??= Song.dummyData();
 		timingMap.reset(chart.timingPoints);
-
-		chart.sortScrollVelocities();
 		velocityMap.reset(chart.scrollVelocities);
 	}
 
