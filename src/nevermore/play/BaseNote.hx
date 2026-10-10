@@ -27,13 +27,7 @@ class BaseNote extends NoteObject {
 	public var multAlpha:Float = 1;
 	public var distance:Float = 0.0;
 	
-	public var visualTime(get, never):Float;
-	function get_visualTime():Float {
-		var pos:Float = data.visualTime;
-
-		if (pos == 0) return time;
-		return pos;
-	}
+	public var visualTime:Float;
 
 	public var time:Float = 0.0;
 	public var player:Int = 0;

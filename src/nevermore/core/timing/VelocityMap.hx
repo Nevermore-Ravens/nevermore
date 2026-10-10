@@ -40,7 +40,7 @@ class VelocityMap {
 	}
 
 	public function getPosition(time:Float):Float {
-		if (length == 0) return -1;
+		if (length == 0) return time;
 		return get(time).toPixels(time);
 	}
 }

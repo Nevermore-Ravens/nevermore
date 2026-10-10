@@ -44,6 +44,7 @@ class Note extends BaseNote {
 		passedStrumline = false;
 		multAlpha = 1;
 		
+		visualTime = data.visualTime;
 		time = data.time;
 		lane = data.lane;
 		player = data.player;
