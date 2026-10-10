@@ -40,6 +40,14 @@ class Receptor extends NoteObject {
 		centerOrigin();
 	}
 
+	override function update(delta:Float) {
+		updateAnimation(delta);
+		for (attach in attachments) {
+			if (attach.exists && attach.active)
+				attach.update(delta);
+		}
+	}
+
 	override function drawComplex(camera:Dynamic) {
 		final firstCam = camera == cameras[0];
 
@@ -49,6 +57,9 @@ class Receptor extends NoteObject {
 
 		// basically, positioning with draw and drawDebug. (ive shouldve just made a group -v-')
  		for (attach in attachments) {
+			if (attach.alpha == 0 || !attach.exists || !attach.visible)
+				continue;
+
 			if (firstCam) {
 				attach.x = x + (width - attach.width) * 0.5;
 				attach.y = y + (height - attach.height) * 0.5;
@@ -56,7 +67,7 @@ class Receptor extends NoteObject {
 
 			attach.checkEmptyFrame();
 
-			if (attach.alpha == 0 || attach._frame.type == FlxFrameType.EMPTY || !attach.isOnScreen(camera))
+			if (attach._frame.type == FlxFrameType.EMPTY || !attach.isOnScreen(camera))
 				continue;
 
 			if (attach.dirty && firstCam) // rarely
@@ -79,6 +90,8 @@ class Receptor extends NoteObject {
 
 	#if !NEVERMORE_NO_MODCHARTS
 	public var modchartPos:Vector3 = new Vector3();
+	public var modchartScaleX:Float = 1;
+	public var modchartScaleY:Float = 1;
 	public var modchartDist:Float = 0;
 	public var oldScaleX:Float = 1;
 	public var oldScaleY:Float = 1;
@@ -97,13 +110,16 @@ class Receptor extends NoteObject {
 		modchart.scrollMult = mult;
 
 		modchartDist = modchart.adjustDistance(this, 0, lane, player, parent, RECEPTOR);
+
 		modchartPos.set(x + width * 0.5, y + height * 0.5 + (modchartDist * mult), 0);
+		scale.set(1, 1);
+
 		modchart.adjustPos(this, modchartPos, modchartDist, 0, lane, player, parent, RECEPTOR);
 		modchart.adjustScale(this, scale, modchartDist, lane, player, parent, RECEPTOR);
 		stealth = modchart.getStealth(this, modchartDist, 0, modchartPos, lane, player, parent, RECEPTOR);
 
-		modchartPos.x += offsetX;
-		modchartPos.y += offsetY;
+		modchartScaleX = scale.x;
+		modchartScaleY = scale.y;
 		modchartPos.z += offsetZ;
 
 		scrollMult = modchart.scrollMult;
@@ -123,6 +139,7 @@ class Receptor extends NoteObject {
 
 		x = modchartPos.x - width * 0.5;
 		y = modchartPos.y - height * 0.5;
+		scale.set(oldScaleX * modchartScaleX, oldScaleY * modchartScaleY);
 		final layer = modchartPos.z;
 		_frame.prepareMatrix(_matrix, ANGLE_0, checkFlipX(), checkFlipY());
 		prepareMatrix(cameras[0]);
@@ -176,21 +193,51 @@ class Receptor extends NoteObject {
 
 		modchartPos.z -= offsetZ;
 		for (attach in attachments) {
-			if (attach.visible)
-				drawAttachmentCrazy(attach, orientAngle);
+			if (attach.exists && attach.visible)
+				drawAttachmentCrazy(attach, modchart, player, orientAngle);
 		}
 	}
 
-	public function drawAttachmentCrazy(attachment:NoteObject, orientAngle:Float) {
+	public function drawAttachmentCrazy(attachment:NoteObject, modchart:ModchartManager, player:Int, orientAngle:Float) {
 		modchartPos.z += attachment.offsetZ;
+
+		final oldScaleX:Float = attachment.scale.x;
+		final oldScaleY:Float = attachment.scale.y;
 
 		attachment.x = modchartPos.x - attachment.width * 0.5;
 		attachment.y = modchartPos.y - attachment.height * 0.5;
 		final layer = modchartPos.z;
 
+		scale.set(oldScaleX * modchartScaleX, oldScaleY * modchartScaleY);
 		attachment._frame.prepareMatrix(attachment._matrix, ANGLE_0, attachment.checkFlipX(), attachment.checkFlipY());
 		attachment.prepareMatrix(attachment.cameras[0]);
 		attachment._matrix.translate(attachment.cameras[0].scroll.x * attachment.scrollFactor.x, attachment.cameras[0].scroll.y * attachment.scrollFactor.y);
+		attachment.scale.set(oldScaleX, oldScaleY);
+
+		Note.modchartVertices[0].set(_matrix.transformX(0, 0), _matrix.transformY(0, 0), modchartPos.z);
+		Note.modchartVertices[1].set(_matrix.transformX(_frame.frame.width, 0), _matrix.transformY(_frame.frame.width, 0), modchartPos.z);
+		Note.modchartVertices[2].set(_matrix.transformX(0, _frame.frame.height), _matrix.transformY(0, _frame.frame.height), modchartPos.z);
+		Note.modchartVertices[3].set(_matrix.transformX(_frame.frame.width, _frame.frame.height), _matrix.transformY(_frame.frame.width, _frame.frame.height), modchartPos.z);
+		
+		var orientAngle:Float = 0;
+		if (orientAngle != 0){
+			for (i => vert in Note.modchartVertices){	
+				vert.x -= modchartPos.x;
+				vert.y -= modchartPos.y;
+				vert.z -= modchartPos.z;
+				vert.rotateRads(0, 0, orientAngle);
+				vert.x += modchartPos.x;
+				vert.y += modchartPos.y;
+				vert.z += modchartPos.z;
+			}
+		}
+
+		for (vert in Note.modchartVertices) {
+			modchart.adjustVertex(this, vert, modchartPos, modchartDist, 0, lane, player, parent, RECEPTOR);
+			vert.project();
+		}
+
+		modchart.pushDraw(player, parent, cameras, scrollFactor, _frame, Note.modchartVertices, colorTransform, blend, antialiasing, luminize, stealth, layer, true);
 
 		modchartPos.z -= attachment.offsetZ;
 	}
