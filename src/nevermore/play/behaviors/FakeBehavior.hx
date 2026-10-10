@@ -1,4 +1,4 @@
-package nevermore.play.note;
+package nevermore.play.behaviors;
 
 class FakeBehavior extends NoteBehavior {
 	public function new() {

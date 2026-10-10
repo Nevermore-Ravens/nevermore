@@ -1,7 +1,7 @@
 package nevermore.core;
 
-import nevermore.play.note.Note;
-import nevermore.play.note.BaseNote;
+import nevermore.play.Note;
+import nevermore.play.BaseNote;
 
 enum abstract ObjectType(Int) {
 	var NOTE;

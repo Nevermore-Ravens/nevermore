@@ -1,4 +1,4 @@
-package nevermore.play.note;
+package nevermore.play.behaviors;
 
 import nevermore.core.timing.BaseClock;
 import nevermore.skins.Noteskin;

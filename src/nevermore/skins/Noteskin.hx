@@ -1,7 +1,7 @@
 package nevermore.skins;
 
-import nevermore.play.note.BaseNote;
-import nevermore.play.note.Note;
+import nevermore.play.BaseNote;
+import nevermore.play.Note;
 import flixel.graphics.frames.FlxFramesCollection;
 
 class Noteskin {

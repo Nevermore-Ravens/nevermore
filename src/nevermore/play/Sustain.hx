@@ -1,4 +1,4 @@
-package nevermore.play.note;
+package nevermore.play;
 
 import flixel.FlxCamera;
 import flixel.animation.FlxAnimation;

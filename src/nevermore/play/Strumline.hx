@@ -2,7 +2,7 @@ package nevermore.play;
 
 import flixel.group.FlxSpriteGroup;
 import nevermore.skins.Noteskin;
-import nevermore.play.note.Sustain;
+import nevermore.play.Sustain;
 
 class Strumline extends FlxTypedSpriteGroup<Receptor> {
 	public var field:NoteField;

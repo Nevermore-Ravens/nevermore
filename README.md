@@ -1,19 +1,10 @@
-# DISCLAIMER !!!!!!!!!!!!
-NONE OF THIS IS FINAL !!!!!!!!!!! im still trying to move stuff over from camellia,  
-so some shit is hardcoded for now (like receptor animations)  
-until i can figure out a good way to separate it it's gonna be a little messy
-
-also myceli was here
-
 # <div align="center">Nevermore</div>
 <div align="center">
-Nevermore is a rhythm game engine made in HaxeFlixel.  
+Nevermore is a vertical scrolling rhythm game (VSRG) engine made in HaxeFlixel.  
 
-It's designed primarily for 4 key vertical-scrolling gameplay (like StepMania, Etterna, NotITG, etc).
+It's primarily designed for keyboard/gamepad play, something along the lines of [Etterna](https://github.com/etternagame/etterna), [StepMania](https://github.com/stepmania/stepmania), [osu!mania](https://osu.ppy.sh), or [Quaver](https://github.com/Quaver/Quaver).
 
-The project stemmed from a Friday Night Funkin' fork/rewrite, Never2x, which was also made for the FNF mod Vs. Camellia, with a similar premise.
-
-It's designed for performance, as well as scalability and gameplay accuracy.
+It supports "multi-key" (as in 5k, 6k, 7k, etc...), but it's mainly intended to be used with 4 keys/lanes.
 
 </div/>
 
@@ -42,8 +33,11 @@ var notefield = new NoteField([strumline], 0);
 add(notefield);
 
 // load the audio and chart
-Conductor.inst = FlxG.sound.load(Assets.audio('$songID/Inst'));
-notefield.load(Song.load(songID, difficulty), {
+Conductor.inst = FlxG.sound.load(Assets.audio(songID + '/Inst'));
+
+// Song.load() will work if you have `moonchart` labeled as a library,
+// otherwise it won't do anything and you'll have to implement your own parser
+notefield.load(Song.load('songs/' + songID + '/chart.sm', difficulty), {
 	randomizedNotes: true,
 	sustains: false
 });
@@ -108,6 +102,14 @@ So, we decided "fuck it", and made our own instead.
 
 The name is still a secret, and does in fact mean something.  
 All in due time.
+
+## "What happened to Never2x? Is it discontinued!?"
+No, not at all! I made this SPECIFICALLY so I could work on Never2x easier, and more consistently across projects.  
+Nevermore is the core gameplay of the project;  
+Never2x is the FNF front-end of Nevermore;  
+Camellia is that, but slightly modified for the mod.
+Both normal Never2x and Camellia use Nevermore as a library, which means both keep the same core gameplay loop.  
+This also means I don't have to keep copy-pasting changes between the 2 over and over.
 
 # Credits
 * RapperGF - Assisting in developing architecture and API

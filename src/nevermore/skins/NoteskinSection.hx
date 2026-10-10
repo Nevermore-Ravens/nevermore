@@ -1,6 +1,6 @@
 package nevermore.skins;
 
-import nevermore.play.note.BaseNote;
+import nevermore.play.BaseNote;
 import flixel.graphics.frames.FlxFramesCollection;
 
 @:structInit

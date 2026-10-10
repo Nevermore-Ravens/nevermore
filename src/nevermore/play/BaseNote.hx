@@ -1,4 +1,4 @@
-package nevermore.play.note;
+package nevermore.play;
 
 import nevermore.core.timing.BaseClock;
 import nevermore.modchart.ModchartManager;

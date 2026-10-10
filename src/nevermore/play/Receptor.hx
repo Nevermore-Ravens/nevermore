@@ -4,7 +4,7 @@ import flixel.graphics.frames.FlxFrame;
 #if !NEVERMORE_NO_MODCHARTS
 import nevermore.modchart.ModchartManager;
 #end
-import nevermore.play.note.Note;
+import nevermore.play.Note;
 
 class Receptor extends NoteObject {
 	public var isHolding:Bool = false;
