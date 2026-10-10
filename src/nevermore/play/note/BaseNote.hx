@@ -8,7 +8,7 @@ import lime.system.System;
 // a data-driven note class that you can build off of 
 // for making your own note(field) system
 // no rendering/drawing is done
-class BaseNote extends FlxSprite {
+class BaseNote extends NoteObject {
 	public var behavior:NoteBehavior;
 
 	public var strumline:Strumline;
@@ -36,11 +36,9 @@ class BaseNote extends FlxSprite {
 	}
 
 	public var time:Float = 0.0;
-	public var lane:Int = 0;
 	public var player:Int = 0;
 	public var length:Float = 0.0;
 	public var beat:Float = 0.0;
-	public var quantization:Bool = false;
 	public var missed:Bool = false;
 
 	public var type(default, set):String;
@@ -80,35 +78,6 @@ class BaseNote extends FlxSprite {
 	public var late(get, never):Bool;
 	function get_late():Bool {
 		return behavior.isLate(this);
-	}
-
-	function prepareMatrix() {
-		_matrix.translate(-origin.x, -origin.y);
-		_matrix.scale(scale.x, scale.y);
-
-		if (bakedRotationAngle <= 0)
-		{
-			updateTrig();
-
-			if (angle != 0)
-				_matrix.rotateWithTrig(_cosAngle, _sinAngle);
-		}
-
-		getScreenPosition(_point, camera).subtractPoint(offset);
-		_point.add(origin.x, origin.y);
-		_matrix.translate(_point.x, _point.y);
-
-		if (isPixelPerfectRender(camera))
-		{
-			_matrix.tx = Math.floor(_matrix.tx);
-			_matrix.ty = Math.floor(_matrix.ty);
-		}
-	}
-
-	override function drawComplex(camera:flixel.FlxCamera) {
-		_frame.prepareMatrix(_matrix, FlxFrameAngle.ANGLE_0, checkFlipX(), checkFlipY());
-		prepareMatrix();
-		camera.drawNote(_frame, _matrix, colorTransform, blend, antialiasing, quantization);
 	}
 
 	public function drawCrazy(modchart:ModchartManager, direction:ScrollDirection) {}

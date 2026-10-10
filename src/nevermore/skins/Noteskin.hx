@@ -150,7 +150,7 @@ class Noteskin {
 	}
 	public function applyToNote(to:BaseNote, section:String) {
 		inline apply(to, to.lane, section);
-		to.scale.scale(to.strumline.size);
+		to.scale.scale(to.strumline.size * to.strumline.keyScale);
 		to.updateHitbox();
 	}
 

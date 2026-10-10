@@ -6,11 +6,12 @@ import nevermore.modchart.ModchartManager;
 #end
 import nevermore.play.note.Note;
 
-class Receptor extends flixel.FlxSprite {
-	public var lane:Int;
+class Receptor extends NoteObject {
 	public var isHolding:Bool = false;
 	public var parent:Strumline;
-	public var quantization:Bool = false;
+
+	public var attachments:Array<NoteObject> = [];
+
 	public function new(parent:Strumline, lane:Int) {
 		super();
 		this.parent = parent;
@@ -31,7 +32,7 @@ class Receptor extends flixel.FlxSprite {
 
 		if (name == 'standard') {
 			color = 0xFFFFFFFF;
-			quantization = false;
+			luminize = false;
 		}
 
 		animation.play(name, true);
@@ -39,34 +40,41 @@ class Receptor extends flixel.FlxSprite {
 		centerOrigin();
 	}
 
-	function prepareMatrix() {
-		_matrix.translate(-origin.x, -origin.y);
-		_matrix.scale(scale.x, scale.y);
+	override function drawComplex(camera:Dynamic) {
+		final firstCam = camera == cameras[0];
 
-		if (bakedRotationAngle <= 0)
-		{
-			updateTrig();
-
-			if (angle != 0)
-				_matrix.rotateWithTrig(_cosAngle, _sinAngle);
-		}
-
-		getScreenPosition(_point, camera).subtractPoint(offset);
-		_point.add(origin.x, origin.y);
-		_matrix.translate(_point.x, _point.y);
-
-		if (isPixelPerfectRender(camera))
-		{
-			_matrix.tx = Math.floor(_matrix.tx);
-			_matrix.ty = Math.floor(_matrix.ty);
-		}
-		_matrix.translate(camera.scroll.x * scrollFactor.x, camera.scroll.y * scrollFactor.y);
-	}
-
-	override function drawComplex(camera:flixel.FlxCamera) {
 		_frame.prepareMatrix(_matrix, FlxFrameAngle.ANGLE_0, checkFlipX(), checkFlipY());
-		prepareMatrix();
-		camera.drawNote(_frame, _matrix, colorTransform, blend, antialiasing, quantization);
+		prepareMatrix(camera);
+		camera.drawNote(_frame, _matrix, colorTransform, blend, antialiasing, luminize);
+
+		// basically, positioning with draw and drawDebug. (ive shouldve just made a group -v-')
+ 		for (attach in attachments) {
+			if (firstCam) {
+				attach.x = x + (width - attach.width) * 0.5;
+				attach.y = y + (height - attach.height) * 0.5;
+			}
+
+			attach.checkEmptyFrame();
+
+			if (attach.alpha == 0 || attach._frame.type == FlxFrameType.EMPTY || !attach.isOnScreen(camera))
+				continue;
+
+			if (attach.dirty && firstCam) // rarely
+				attach.calcFrame(attach.useFramePixels);
+
+			attach.drawComplex(camera);
+
+			#if FLX_DEBUG
+			flixel.FlxBasic.visibleCount++;
+
+			if (FlxG.debugger.drawDebug && !attach.ignoreDrawDebug) {
+				attach.drawDebugOnCamera(camera);
+
+				if (attach.path != null && !attach.path.ignoreDrawDebug)
+					attach.path.drawDebug(); // weirdly enough (at least the version we test on) they dont toss in the camera here
+			}
+			#end
+		}
 	}
 
 	#if !NEVERMORE_NO_MODCHARTS
@@ -93,7 +101,11 @@ class Receptor extends flixel.FlxSprite {
 		modchart.adjustPos(this, modchartPos, modchartDist, 0, lane, player, parent, RECEPTOR);
 		modchart.adjustScale(this, scale, modchartDist, lane, player, parent, RECEPTOR);
 		stealth = modchart.getStealth(this, modchartDist, 0, modchartPos, lane, player, parent, RECEPTOR);
-		
+
+		modchartPos.x += offsetX;
+		modchartPos.y += offsetY;
+		modchartPos.z += offsetZ;
+
 		scrollMult = modchart.scrollMult;
 		stealthColor.copyFrom(modchart.stealthColor);
 	}
@@ -113,7 +125,8 @@ class Receptor extends flixel.FlxSprite {
 		y = modchartPos.y - height * 0.5;
 		final layer = modchartPos.z;
 		_frame.prepareMatrix(_matrix, ANGLE_0, checkFlipX(), checkFlipY());
-		prepareMatrix();
+		prepareMatrix(cameras[0]);
+		_matrix.translate(cameras[0].scroll.x * scrollFactor.x, cameras[0].scroll.y * scrollFactor.y);
 
 		x = oldX;
 		y = oldY;
@@ -124,6 +137,7 @@ class Receptor extends flixel.FlxSprite {
 		Note.modchartVertices[2].set(_matrix.transformX(0, _frame.frame.height), _matrix.transformY(0, _frame.frame.height), modchartPos.z);
 		Note.modchartVertices[3].set(_matrix.transformX(_frame.frame.width, _frame.frame.height), _matrix.transformY(_frame.frame.width, _frame.frame.height), modchartPos.z);
 		
+		var orientAngle:Float = 0;
 		final orient:Float = modchart.get("orient", player);
 		if (orient != 0){
 			final orientOffset: Float = modchart.get("orientoffset", player);
@@ -139,12 +153,13 @@ class Receptor extends flixel.FlxSprite {
 
 			final diffX:Float = Note.cachePoint.x;
 			final diffY:Float = Note.cachePoint.y;
+			orientAngle = orient * (Math.atan2(diffY, diffX) - (Math.PI / 2));
 
 			for (i => vert in Note.modchartVertices){	
 				vert.x -= modchartPos.x;
 				vert.y -= modchartPos.y;
 				vert.z -= modchartPos.z;
-				vert.rotateRads(0, 0, orient * (Math.atan2(diffY, diffX) - (Math.PI / 2)));
+				vert.rotateRads(0, 0, orientAngle);
 				vert.x += modchartPos.x;
 				vert.y += modchartPos.y;
 				vert.z += modchartPos.z;
@@ -157,7 +172,27 @@ class Receptor extends flixel.FlxSprite {
 			vert.project();
 		}
 
-		modchart.pushDraw(player, parent, cameras, scrollFactor, _frame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer, true);
+		modchart.pushDraw(player, parent, cameras, scrollFactor, _frame, Note.modchartVertices, colorTransform, blend, antialiasing, luminize, stealth, layer, true);
+
+		modchartPos.z -= offsetZ;
+		for (attach in attachments) {
+			if (attach.visible)
+				drawAttachmentCrazy(attach, orientAngle);
+		}
+	}
+
+	public function drawAttachmentCrazy(attachment:NoteObject, orientAngle:Float) {
+		modchartPos.z += attachment.offsetZ;
+
+		attachment.x = modchartPos.x - attachment.width * 0.5;
+		attachment.y = modchartPos.y - attachment.height * 0.5;
+		final layer = modchartPos.z;
+
+		attachment._frame.prepareMatrix(attachment._matrix, ANGLE_0, attachment.checkFlipX(), attachment.checkFlipY());
+		attachment.prepareMatrix(attachment.cameras[0]);
+		attachment._matrix.translate(attachment.cameras[0].scroll.x * attachment.scrollFactor.x, attachment.cameras[0].scroll.y * attachment.scrollFactor.y);
+
+		modchartPos.z -= attachment.offsetZ;
 	}
 	#end
 }

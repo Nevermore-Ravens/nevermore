@@ -30,7 +30,7 @@ class MineBehavior extends NoteBehavior {
 	}
 
 	override function setup(note:BaseNote) {
-		note.quantization = false;
+		note.luminize = false;
 		note.color = 0xFFFFFFFF;
 	}
 }

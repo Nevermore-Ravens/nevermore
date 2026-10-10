@@ -35,12 +35,6 @@ class Sustain extends Note {
 		behavior.setup(this);
 		behavior.applySkin(this, SUSTAIN);
 
-		var keyScale:Float = 1 / (strumline.keyCount / 4);
-		scale.scale(keyScale);
-		width *= keyScale;
-		height *= keyScale;
-		centerOffsets();
-
 		lastScaleY = -1;
 		lastSustainScale = -1;
 
@@ -167,12 +161,12 @@ class Sustain extends Note {
 			flipY = !flipY;
 		
 		final yMult = flipY ? -1 : 1;
-		var curY = -camera.scroll.y * scrollFactor.y;
+		var curY = offsetY * yMult - camera.scroll.y * scrollFactor.y;
 
 		// drawing each individual piece
 		var holdWidth = (holdFrame.frame.width * scale.x * 0.5);
-		vertices[0] = vertices[4] = x - camX - holdWidth;
-		vertices[2] = vertices[6] = x - camX + holdWidth;
+		vertices[0] = vertices[4] = x + offsetX - camX - holdWidth;
+		vertices[2] = vertices[6] = x + offsetX - camX + holdWidth;
 
 		final backupHoldY = holdFrame.frame.y;
 		final backupHoldHeight = holdFrame.frame.height;
@@ -190,7 +184,7 @@ class Sustain extends Note {
 			// only renders the piece if the piece is within the viewport
 			if (Math.min(vertices[1], vertices[5]) <= camera.viewMarginBottom && 
 				Math.max(vertices[1], vertices[5]) >= camera.viewMarginTop) {
-				camera.drawNoteVertices(holdFrame, vertices, colorTransform, blend, antialiasing, quantization, 0, colorTransform.alphaMultiplier * regrabAlpha);
+				camera.drawNoteVertices(holdFrame, vertices, colorTransform, blend, antialiasing, luminize, 0, colorTransform.alphaMultiplier * regrabAlpha);
 			}
 		}
 
@@ -209,7 +203,7 @@ class Sustain extends Note {
 		// only renders the tail if the piece is within the viewport
 		if (Math.min(vertices[1], vertices[5]) <= camera.viewMarginBottom && 
 			Math.max(vertices[1], vertices[5]) >= camera.viewMarginTop) {
-			camera.drawNoteVertices(tailFrame, vertices, colorTransform, blend, antialiasing, quantization, 0, colorTransform.alphaMultiplier * regrabAlpha);
+			camera.drawNoteVertices(tailFrame, vertices, colorTransform, blend, antialiasing, luminize, 0, colorTransform.alphaMultiplier * regrabAlpha);
 		}
 
 		tailFrame.frame.y = backupTailY;
@@ -256,7 +250,7 @@ class Sustain extends Note {
 		modchart.curField = player;
 
 		var curDist = distance * yMult;
-		var curY = 0.0;
+		var curY = offsetY;
 
 		updateFrames(clock.time);
 		
@@ -306,6 +300,7 @@ class Sustain extends Note {
 				FlxMath.lerp(modchartPosLow.z, baseZ, sexuality),
 			);
 
+			// first one was for straightholds/gayholds, this one is for extrastraightholds.
 			modchartPosLow.set(
 				FlxMath.lerp(modchartPosLow.x, x, superstraight),
 				FlxMath.lerp(modchartPosLow.y, rawY + (curDist * yMult), superstraight),
@@ -325,16 +320,16 @@ class Sustain extends Note {
 		final offsetY = spiral ? halfHoldWidth * Math.cos(angleDown) : 0;
 
 		Note.modchartVertices[0].set(
-			modchartPos.x - offsetX,
-			modchartPos.y + offsetY,
-			modchartPos.z
+			modchartPos.x - offsetX + this.offsetX,
+			modchartPos.y + offsetY + this.offsetY,
+			modchartPos.z + this.offsetZ
 		);
 		modchart.adjustVertex(this, Note.modchartVertices[0], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 		Note.modchartVertices[0].project();
 		Note.modchartVertices[1].set(
-			modchartPos.x + offsetX,
-			modchartPos.y - offsetY,
-			modchartPos.z
+			modchartPos.x + offsetX + this.offsetX,
+			modchartPos.y - offsetY + this.offsetY,
+			modchartPos.z + this.offsetZ
 		);
 		modchart.adjustVertex(this, Note.modchartVertices[1], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 		Note.modchartVertices[1].project();
@@ -354,22 +349,22 @@ class Sustain extends Note {
 			final offsetY = spiral ? halfHoldWidth * Math.cos((angleDown + angleUp) * 0.5) : 0;
 
 			Note.modchartVertices[2].set(
-				modchartPos.x - offsetX,
-				modchartPos.y + offsetY,
-				modchartPos.z
+				modchartPos.x - offsetX + this.offsetX,
+				modchartPos.y + offsetY + this.offsetY,
+				modchartPos.z + this.offsetZ
 			);
 			modchart.adjustVertex(this, Note.modchartVertices[2], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 			Note.modchartVertices[2].project();
 			Note.modchartVertices[3].set(
-				modchartPos.x + offsetX,
-				modchartPos.y - offsetY,
-				modchartPos.z
+				modchartPos.x + offsetX + this.offsetX,
+				modchartPos.y - offsetY + this.offsetY,
+				modchartPos.z + this.offsetZ
 			);
 			modchart.adjustVertex(this, Note.modchartVertices[3], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 			Note.modchartVertices[3].project();
 
 			modchart.stealthColor.copyFrom(curStealthColor);
-			modchart.pushDraw(player, strumline, cameras, scrollFactor, holdFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer);
+			modchart.pushDraw(player, strumline, cameras, scrollFactor, holdFrame, Note.modchartVertices, colorTransform, blend, antialiasing, luminize, stealth, layer);
 			modchart.stealthColor.copyFrom(nextStealthColor);
 
 			Note.modchartVertices[0].copyFrom(Note.modchartVertices[2]);
@@ -390,21 +385,21 @@ class Sustain extends Note {
 		final offsetY = spiral ? halfTailWidth * Math.cos(angleUp) : 0;
 
 		Note.modchartVertices[2].set(
-			modchartPos.x - offsetX,
-			modchartPos.y + offsetY,
-			modchartPos.z
+			modchartPos.x - offsetX + this.offsetX,
+			modchartPos.y + offsetY + this.offsetY,
+			modchartPos.z + this.offsetZ
 		);
 		modchart.adjustVertex(this, Note.modchartVertices[2], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 		Note.modchartVertices[2].project();
 		Note.modchartVertices[3].set(
-			modchartPos.x + offsetX,
-			modchartPos.y - offsetY,
-			modchartPos.z
+			modchartPos.x + offsetX + this.offsetX,
+			modchartPos.y - offsetY + this.offsetY,
+			modchartPos.z + this.offsetZ
 		);
 		modchart.adjustVertex(this, Note.modchartVertices[3], modchartPos, newDist, curDist, lane, player, strumline, SUSTAIN);
 		Note.modchartVertices[3].project();
 
-		modchart.pushDraw(player, strumline, cameras, scrollFactor, tailFrame, Note.modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer);
+		modchart.pushDraw(player, strumline, cameras, scrollFactor, tailFrame, Note.modchartVertices, colorTransform, blend, antialiasing, luminize, stealth, layer);
 
 		tailFrame.frame.y = backupTailY;
 		tailFrame.frame.height = backupTailHeight;

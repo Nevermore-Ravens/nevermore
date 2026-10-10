@@ -24,12 +24,6 @@ class Note extends BaseNote {
 		behavior = NoteBehavior.get(type);
 		behavior.setup(this);
 		behavior.applySkin(this, NOTE);
-
-		var keyScale:Float = 1 / (strumline.keyCount / 4);
-		scale.scale(keyScale);
-		width *= (keyScale);
-		height *= (keyScale);
-		centerOffsets();
 		return v;
 	}
 
@@ -57,10 +51,10 @@ class Note extends BaseNote {
 		length = data.length;
 		
 		this.receptor = strumline.members[lane];
-		if (!strumline.quantization) quantization = false;
-		else quantization = Nevermore.settings.quantization;
+		if (!strumline.quantization) luminize = false;
+		else luminize = Nevermore.settings.quantization;
 
-		color = quantization ? Quantization.current[data.snapID] : FlxColor.WHITE;
+		color = luminize ? Quantization.current[data.snapID] : FlxColor.WHITE;
 
 		type = data.type;
 
@@ -114,12 +108,13 @@ class Note extends BaseNote {
 		modchart.adjustPos(this, modchartPos, newDistance, distance * mult, lane, player, strumline, NOTE);
 		modchart.adjustScale(this, scale, newDistance, lane, player, strumline, NOTE); // TODO: add newDistance to the args of this and getStealth
 		stealth = modchart.getStealth(this, newDistance, distance * mult, modchartPos, lane, player, strumline, NOTE);
+		modchartPos.z += offsetZ;
 
 		x = modchartPos.x - width * 0.5;
 		y = modchartPos.y - height * 0.5;
 		final layer = modchartPos.z;
 		_frame.prepareMatrix(_matrix, ANGLE_0, checkFlipX(), checkFlipY());
-		prepareMatrix();
+		prepareMatrix(cameras[0]);
 		_matrix.translate(cameras[0].scroll.x * scrollFactor.x, cameras[0].scroll.y * scrollFactor.y);
 		x = oldX;
 		y = oldY;
@@ -162,6 +157,6 @@ class Note extends BaseNote {
 			vert.project();
 		}
 
-		modchart.pushDraw(player, strumline, cameras, scrollFactor, _frame, modchartVertices, colorTransform, blend, antialiasing, quantization, stealth, layer);
+		modchart.pushDraw(player, strumline, cameras, scrollFactor, _frame, modchartVertices, colorTransform, blend, antialiasing, luminize, stealth, layer);
 	}
 }

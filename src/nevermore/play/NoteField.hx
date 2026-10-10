@@ -129,9 +129,9 @@ class NoteField extends BaseField {
 					}
 
 					note.receptor.glow();
-					if (note.quantization) {
+					if (note.luminize) {
 						note.receptor.color = note.color;
-						note.receptor.quantization = true;
+						note.receptor.luminize = true;
 					}
 					noteHit(note.strumline, note);
 				}
@@ -279,9 +279,9 @@ class NoteField extends BaseField {
 				receptor.isHolding = true;
 			}
 
-			if (noteToHit.quantization) {
+			if (noteToHit.luminize) {
 				receptor.color = noteToHit.color;
-				receptor.quantization = true;
+				receptor.luminize = true;
 			}
 		} else {
 			receptor.isHolding = true;
@@ -366,9 +366,9 @@ class NoteField extends BaseField {
 		sustain.untilTick = sustainInterval;
 		if (strumline.ai || held) {
 			receptor.glow();
-			if (sustain.quantization) {
+			if (sustain.luminize) {
 				receptor.color = sustain.color;
-				receptor.quantization = true;
+				receptor.luminize = true;
 			}
 		}
 
