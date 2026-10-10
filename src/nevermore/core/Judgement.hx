@@ -79,6 +79,7 @@ class Judgement {
 	public var name:String = 'Unknown';
 	public var breaksCombo:Bool = false;
 	public var window:Float = 0.0;
+	public var health:Float = 0.0;
 	public var color:Int = 0xFFFFFFFF;
 	public var hits:Int = 0;
 }
