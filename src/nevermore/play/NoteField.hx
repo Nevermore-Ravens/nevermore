@@ -122,7 +122,7 @@ class NoteField extends BaseField {
 
 			// should probably move this to a separate function later
 			if (note.strumline.ai) {
-				if (note.adjustedTime - clock.time <= 0) {
+				if (!note.behavior.punishable && note.adjustedTime - clock.time <= 0) {
 					note.kill();
 					if (note.sustain != null) {
 						note.sustain.wasHit = true;
@@ -147,8 +147,7 @@ class NoteField extends BaseField {
 
 		if (updateBehaviors) {
 			for (i in NoteBehavior.getListOfBehaviours()) {
-				var notesToCheck:Array<Note> = [for (n in notes.members) {if (n.behavior == i) n;}];
-				i.update(delta, notesToCheck);
+				i.update(delta, [for (n in notes.members) {if (n.behavior == i) n;}]);
 			}
 		}
 
