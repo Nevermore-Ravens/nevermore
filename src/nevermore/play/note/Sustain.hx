@@ -35,9 +35,10 @@ class Sustain extends Note {
 		behavior.setup(this);
 		behavior.applySkin(this, SUSTAIN);
 
-		scale.scale(1 / (strumline.keyCount / 4));
-		width *= (1 / (strumline.keyCount / 4));
-		height *= (1 / (strumline.keyCount / 4));
+		var keyScale:Float = 1 / (strumline.keyCount / 4);
+		scale.scale(keyScale);
+		width *= keyScale;
+		height *= keyScale;
 		centerOffsets();
 
 		lastScaleY = -1;

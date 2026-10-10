@@ -24,9 +24,11 @@ class Note extends BaseNote {
 		behavior = NoteBehavior.get(type);
 		behavior.setup(this);
 		behavior.applySkin(this, NOTE);
-		scale.scale(1 / (strumline.keyCount / 4));
-		width *= (1 / (strumline.keyCount / 4));
-		height *= (1 / (strumline.keyCount / 4));
+
+		var keyScale:Float = 1 / (strumline.keyCount / 4);
+		scale.scale(keyScale);
+		width *= (keyScale);
+		height *= (keyScale);
 		centerOffsets();
 		return v;
 	}
